@@ -9,24 +9,22 @@ body {
   align-items: center;
 }
 
-/* NAV */
+/* NAV (clean glass bar, not bubble overload) */
 .nav {
-  width: auto;
-  margin-top: 20px;
+  width: 95%;
+  margin-top: 15px;
 
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
 
-  padding: 12px 16px;
+  padding: 12px 18px;
 
   background: rgba(255,255,255,0.04);
   backdrop-filter: blur(16px);
 
   border: 1px solid rgba(255,106,0,0.2);
-  border-radius: 999px;
-
-  box-shadow: 0 0 20px rgba(255,106,0,0.1);
+  border-radius: 14px;
 }
 
 .logo {
@@ -37,13 +35,14 @@ body {
 /* SEARCH */
 .search {
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: 10px;
 
   background: rgba(0,0,0,0.4);
   border: 1px solid rgba(255,106,0,0.3);
   color: white;
 
   outline: none;
+  width: 200px;
 }
 
 /* NAV BUTTONS */
@@ -53,84 +52,99 @@ body {
   color: white;
 
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: 8px;
 
   cursor: pointer;
-  transition: 0.2s;
 }
 
 .links button:hover {
-  box-shadow: 0 0 10px rgba(255,106,0,0.5);
-  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(255,106,0,0.4);
 }
 
-/* MAIN LAYOUT */
+/* MAIN */
 .container {
-  margin-top: 40px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
+  margin-top: 30px;
+  width: 95%;
+  max-width: 1000px;
 }
 
-/* TABS */
-.tab {
-  display: none;
-  justify-content: center;
-}
-
-.tab.active {
-  display: flex;
-}
-
-/* BUBBLE CARD */
-.card {
-  width: fit-content;
-  max-width: 500px;
-
-  padding: 20px;
-
+/* SECTIONS (NOT BUBBLES) */
+.panel {
   background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(18px);
-
-  border: 1px solid rgba(255,106,0,0.25);
-  border-radius: 18px;
-
-  box-shadow: 0 0 25px rgba(255,106,0,0.08);
-
-  text-align: center;
-}
-
-/* ITEM BUBBLES */
-.item {
-  margin: 6px auto;
-  padding: 8px 12px;
-
-  width: fit-content;
-
-  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(16px);
 
   border: 1px solid rgba(255,106,0,0.2);
+  border-radius: 14px;
+
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* ITEMS = BUBBLES ONLY */
+.item {
+  display: inline-block;
+
+  margin: 6px;
+  padding: 8px 12px;
+
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,106,0,0.2);
+
   border-radius: 999px;
 
   transition: 0.2s;
 }
 
 .item:hover {
-  transform: scale(1.03);
+  transform: scale(1.05);
   box-shadow: 0 0 10px rgba(255,106,0,0.4);
 }
 
-/* RESPONSIVE */
-@media (max-width: 700px) {
+/* TEAM CARD STRUCTURE */
+.team-card {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,106,0,0.2);
+  border-radius: 12px;
+
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.team-title {
+  color: #ff6a00;
+  font-weight: bold;
+}
+
+.meta {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* TABS */
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+/* MOBILE */
+@media (max-width: 800px) {
   .nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    border-radius: 20px;
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .card {
-    width: 90%;
+  .search {
+    width: 100%;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
   }
 }
