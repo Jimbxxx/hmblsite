@@ -19,33 +19,22 @@ function checkPassword() {
 }
 
 async function loadData() {
-  try {
-    const teamsRes = await fetch("http://127.0.0.1:8000/teams");
-    const divisionsRes = await fetch("http://127.0.0.1:8000/divisions");
+  const teamsRes = await fetch("http://127.0.0.1:8000/teams");
+  const divisionsRes = await fetch("http://127.0.0.1:8000/divisions");
 
-    const teamsJson = await teamsRes.json();
-    const divisionsJson = await divisionsRes.json();
+  const teams = await teamsRes.json();
+  const divisions = await divisionsRes.json();
 
-    renderTeams(teamsJson.data);
-    renderDivisions(divisionsJson.data);
-
-  } catch (err) {
-    console.log("API error:", err);
-  }
+  renderTeams(teams.data);
+  renderDivisions(divisions.data);
 }
 
 function renderTeams(data) {
   const el = document.getElementById("teams");
   el.innerHTML = "";
 
-  Object.values(data || {}).forEach(team => {
-    el.innerHTML += `
-      <div>
-        <p>⚽ ${team.name}</p>
-        <small>${team.division}</small>
-      </div>
-      <hr>
-    `;
+  data.forEach(t => {
+    el.innerHTML += `<p>⚽ ${t.name}</p>`;
   });
 }
 
@@ -53,7 +42,7 @@ function renderDivisions(data) {
   const el = document.getElementById("divisions");
   el.innerHTML = "";
 
-  Object.values(data || {}).forEach(div => {
-    el.innerHTML += `<p>🏆 ${div.name}</p>`;
+  data.forEach(d => {
+    el.innerHTML += `<p>🏆 ${d.name}</p>`;
   });
 }
