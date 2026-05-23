@@ -9,58 +9,63 @@
 
 <body>
 
-<header class="navbar">
+<!-- NAV -->
+<header class="nav">
   <div class="logo">HMBL</div>
-  <button class="btn" onclick="openLogin()">Jimbo's Dashboard</button>
+
+  <input id="search" class="search" placeholder="Search users, teams..." />
+
+  <nav class="links">
+    <button onclick="showTab('home')">Home</button>
+    <button onclick="showTab('leaderboard')">Leaderboard</button>
+    <button onclick="showTab('teams')">Teams</button>
+    <button onclick="showTab('games')">Recent Games</button>
+    <button onclick="showTab('tables')">Tables</button>
+  </nav>
 </header>
 
-<section class="hero">
-  <div class="glass">
+<!-- CONTENT -->
+<main class="container">
 
-    <div class="tag">@everyone</div>
+  <!-- HOME -->
+  <section id="home" class="tab active">
+    <div class="card">
+      <h1>HMBL Dashboard</h1>
+      <p>Live league system with teams, stats and matches.</p>
+    </div>
+  </section>
 
-    <h1>Something big is coming to HMBL</h1>
+  <!-- LEADERBOARD -->
+  <section id="leaderboard" class="tab">
+    <div class="card">
+      <h2>Leaderboard (placeholder)</h2>
+      <p>API: /leaderboard (coming soon)</p>
+    </div>
+  </section>
 
-    <p>This is not a normal update. It is a shift in how the league is recorded, tracked, and experienced.</p>
-    <p>Matches, goals, assists, performances will now be stored properly.</p>
-    <p>The league is evolving into something structured and permanent.</p>
-
-    <div class="divider"></div>
-
-    <p class="highlight">Stats • Teams • History • Rankings</p>
-    <p class="muted">More will be revealed soon.</p>
-
-  </div>
-</section>
-
-<!-- LOGIN -->
-<div id="loginModal" class="modal">
-  <div class="modal-box">
-    <h2>Dashboard Access</h2>
-    <input type="password" id="passwordInput" placeholder="Password">
-    <button class="btn full" onclick="checkPassword()">Enter</button>
-    <p id="error" class="error"></p>
-  </div>
-</div>
-
-<!-- DASHBOARD -->
-<main id="dashboard" class="dashboard">
-
-  <h1 class="title">Dashboard</h1>
-
-  <div class="grid">
-
+  <!-- TEAMS -->
+  <section id="teams" class="tab">
     <div class="card">
       <h2>Teams</h2>
-      <div id="teams"></div>
+      <div id="teamsList"></div>
     </div>
+  </section>
 
+  <!-- GAMES -->
+  <section id="games" class="tab">
+    <div class="card">
+      <h2>Recent Games (placeholder)</h2>
+      <p>API: /matches (coming soon)</p>
+    </div>
+  </section>
+
+  <!-- TABLES -->
+  <section id="tables" class="tab">
     <div class="card">
       <h2>Divisions</h2>
-      <div id="divisions"></div>
+      <div id="divisionsList"></div>
     </div>
-
-  </div>
+  </section>
 
 </main>
 
