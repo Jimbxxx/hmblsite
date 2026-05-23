@@ -1,48 +1,47 @@
-const PASSWORD = "hmbl123"; // change later
+const API = "http://127.0.0.1:8000";
 
-function openLogin() {
-  document.getElementById("loginModal").style.display = "flex";
+// ---------------- NAV TABS ----------------
+function showTab(tabId) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById(tabId).classList.add("active");
 }
 
-function checkPassword() {
-  const input = document.getElementById("passwordInput").value;
+// ---------------- LOAD DATA ----------------
+async function load() {
+  try {
+    const teamsRes = await fetch(`${API}/teams`);
+    const divRes = await fetch(`${API}/divisions`);
 
-  if (input === PASSWORD) {
-    document.getElementById("loginModal").style.display = "none";
-    document.querySelector(".container").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
+    const teams = await teamsRes.json();
+    const divisions = await divRes.json();
 
-    loadData();
-  } else {
-    document.getElementById("error").innerText = "Wrong password";
+    renderTeams(teams.data);
+    renderDivisions(divisions.data);
+
+  } catch (err) {
+    console.log("API error:", err);
   }
 }
 
-async function loadData() {
-  const teamsRes = await fetch("http://127.0.0.1:8000/teams");
-  const divisionsRes = await fetch("http://127.0.0.1:8000/divisions");
-
-  const teams = await teamsRes.json();
-  const divisions = await divisionsRes.json();
-
-  renderTeams(teams.data);
-  renderDivisions(divisions.data);
-}
-
+// ---------------- TEAMS ----------------
 function renderTeams(data) {
-  const el = document.getElementById("teams");
+  const el = document.getElementById("teamsList");
   el.innerHTML = "";
 
-  data.forEach(t => {
-    el.innerHTML += `<p>⚽ ${t.name}</p>`;
+  Object.values(data || {}).forEach(t => {
+    el.innerHTML += `<div class="item">${t.name}</div>`;
   });
 }
 
+// ---------------- DIVISIONS ----------------
 function renderDivisions(data) {
-  const el = document.getElementById("divisions");
+  const el = document.getElementById("divisionsList");
   el.innerHTML = "";
 
-  data.forEach(d => {
-    el.innerHTML += `<p>🏆 ${d.name}</p>`;
+  Object.values(data || {}).forEach(d => {
+    el.innerHTML += `<div class="item">${d.name}</div>`;
   });
 }
+
+// ---------------- INIT ----------------
+load();
