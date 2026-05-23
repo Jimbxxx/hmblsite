@@ -3,42 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HMBL Update</title>
+  <title>HMBL</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="container">
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">HMBL</div>
+  <div class="nav-right">
+    <button onclick="openLogin()">Jimbo's Dashboard</button>
+  </div>
+</div>
 
-    <div class="box">
+<!-- MAIN PAGE -->
+<div class="container">
 
-      <h1>Something big is coming to HMBL...</h1>
+  <div class="box">
+    <div class="tag">@everyone</div>
 
-      <p>
-        This is not a normal update.<br>
-        This is a shift in how the league is recorded, tracked, and experienced.
-      </p>
+    <h1>Something big is coming to HMBL...</h1>
 
-      <p>
-        Matches, goals, assists, performances — all will now be tracked and stored properly.
-      </p>
+    <p>This is not a normal update.<br>
+    This is a shift in how the league is recorded, tracked, and experienced.</p>
 
-      <p>
-        The league is evolving into something more structured and permanent.
-      </p>
+    <p>Matches, goals, assists, performances — all will now be tracked and stored properly.</p>
 
-      <p class="highlight">
-        Stats. Teams. History. Rankings. One place.
-      </p>
+    <p>The league is evolving into something more structured and permanent.</p>
 
-      <p class="footer-text">
-        More will be revealed soon.
-      </p>
+    <p class="highlight">Stats. Teams. History. Rankings. One place.</p>
 
+    <p class="footer-text">More will be revealed soon.</p>
+  </div>
+
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+  <div class="modal-box">
+    <h2>Enter Password</h2>
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button onclick="checkPassword()">Enter</button>
+    <p id="error"></p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
+
+  <h1 class="glow-title">HMBL Dashboard</h1>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>Teams</h2>
+      <div id="teams"></div>
+    </div>
+
+    <div class="card">
+      <h2>Divisions</h2>
+      <div id="divisions"></div>
     </div>
 
   </div>
 
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
