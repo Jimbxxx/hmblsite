@@ -10,65 +10,82 @@
 <body>
 
 <!-- NAVBAR -->
-<div class="navbar">
+<header class="navbar">
   <div class="logo">HMBL</div>
+
   <div class="nav-right">
-    <button onclick="openLogin()">Jimbo's Dashboard</button>
+    <button class="btn" onclick="openLogin()">Jimbo's Dashboard</button>
   </div>
-</div>
+</header>
 
-<!-- MAIN PAGE -->
-<div class="container">
+<!-- HERO -->
+<section class="hero container">
+  <div class="card hero-card">
 
-  <div class="box">
-    <div class="tag">Ewan Smells!</div>
+    <div class="tag">@everyone</div>
 
-    <h1>Something big is coming to HMBL...</h1>
+    <h1>Something big is coming to HMBL</h1>
 
-    <p>This is not a normal update.<br>
-    This is a shift in how the league is recorded, tracked, and experienced.</p>
+    <p>
+      This is not a normal update. It is a shift in how the league is recorded, tracked, and experienced.
+    </p>
 
-    <p>Matches, goals, assists, performances — all will now be tracked and stored properly.</p>
+    <p>
+      Matches, goals, assists, and performances will now be stored properly and consistently.
+    </p>
 
-    <p>The league is evolving into something more structured and permanent.</p>
+    <p>
+      The league is evolving into something structured and permanent.
+    </p>
 
-    <p class="highlight">Stats. Teams. History. Rankings. One place.</p>
+    <div class="divider"></div>
 
-    <p class="footer-text">More will be revealed soon.</p>
+    <p class="highlight">
+      Stats • Teams • History • Rankings
+    </p>
+
+    <p class="muted">
+      More will be revealed soon.
+    </p>
+
   </div>
-
-</div>
+</section>
 
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal">
   <div class="modal-box">
-    <h2>Enter Password</h2>
-    <input type="password" id="passwordInput" placeholder="Password">
-    <button onclick="checkPassword()">Enter</button>
-    <p id="error"></p>
+
+    <h2>Dashboard Access</h2>
+
+    <input type="password" id="passwordInput" placeholder="Enter password">
+
+    <button class="btn full" onclick="checkPassword()">Continue</button>
+
+    <p id="error" class="error"></p>
+
   </div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" class="dashboard">
+<main id="dashboard" class="dashboard">
 
-  <h1 class="glow-title">HMBL Dashboard</h1>
+  <h1 class="title">Dashboard</h1>
 
   <div class="grid">
 
     <div class="card">
-      <h2>Teams</h2>
-      <div id="teams"></div>
+      <div class="card-title">Teams</div>
+      <div id="teams" class="list"></div>
     </div>
 
     <div class="card">
-      <h2>Divisions</h2>
-      <div id="divisions"></div>
+      <div class="card-title">Divisions</div>
+      <div id="divisions" class="list"></div>
     </div>
 
   </div>
 
-</div>
+</main>
 
 <script src="script.js"></script>
 </body>
