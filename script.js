@@ -23,7 +23,6 @@ async function load() {
   }
 }
 
-// ---------------- TEAMS ----------------
 function renderTeams(data) {
   const el = document.getElementById("teamsList");
   el.innerHTML = "";
@@ -33,7 +32,6 @@ function renderTeams(data) {
   });
 }
 
-// ---------------- DIVISIONS ----------------
 function renderDivisions(data) {
   const el = document.getElementById("divisionsList");
   el.innerHTML = "";
