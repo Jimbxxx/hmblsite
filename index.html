@@ -9,60 +9,37 @@
 
 <body>
 
-<!-- NAVBAR -->
 <header class="navbar">
   <div class="logo">HMBL</div>
-
-  <div class="nav-right">
-    <button class="btn" onclick="openLogin()">Jimbo's Dashboard</button>
-  </div>
+  <button class="btn" onclick="openLogin()">Jimbo's Dashboard</button>
 </header>
 
-<!-- HERO -->
-<section class="hero container">
-  <div class="card hero-card">
+<section class="hero">
+  <div class="glass">
 
     <div class="tag">@everyone</div>
 
     <h1>Something big is coming to HMBL</h1>
 
-    <p>
-      This is not a normal update. It is a shift in how the league is recorded, tracked, and experienced.
-    </p>
-
-    <p>
-      Matches, goals, assists, and performances will now be stored properly and consistently.
-    </p>
-
-    <p>
-      The league is evolving into something structured and permanent.
-    </p>
+    <p>This is not a normal update. It is a shift in how the league is recorded, tracked, and experienced.</p>
+    <p>Matches, goals, assists, performances will now be stored properly.</p>
+    <p>The league is evolving into something structured and permanent.</p>
 
     <div class="divider"></div>
 
-    <p class="highlight">
-      Stats • Teams • History • Rankings
-    </p>
-
-    <p class="muted">
-      More will be revealed soon.
-    </p>
+    <p class="highlight">Stats • Teams • History • Rankings</p>
+    <p class="muted">More will be revealed soon.</p>
 
   </div>
 </section>
 
-<!-- LOGIN MODAL -->
+<!-- LOGIN -->
 <div id="loginModal" class="modal">
   <div class="modal-box">
-
     <h2>Dashboard Access</h2>
-
-    <input type="password" id="passwordInput" placeholder="Enter password">
-
-    <button class="btn full" onclick="checkPassword()">Continue</button>
-
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button class="btn full" onclick="checkPassword()">Enter</button>
     <p id="error" class="error"></p>
-
   </div>
 </div>
 
@@ -74,13 +51,13 @@
   <div class="grid">
 
     <div class="card">
-      <div class="card-title">Teams</div>
-      <div id="teams" class="list"></div>
+      <h2>Teams</h2>
+      <div id="teams"></div>
     </div>
 
     <div class="card">
-      <div class="card-title">Divisions</div>
-      <div id="divisions" class="list"></div>
+      <h2>Divisions</h2>
+      <div id="divisions"></div>
     </div>
 
   </div>
