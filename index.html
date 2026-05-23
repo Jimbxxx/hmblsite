@@ -4,32 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HMBL</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<div class="bg-glow" id="glow"></div>
+
 <header class="nav">
+
   <div class="logo">HMBL</div>
 
-  <input id="search" class="search" placeholder="Search teams, players..." />
+  <input
+    class="search"
+    type="text"
+    placeholder="Search teams, players..."
+  >
 
   <nav class="links">
     <button onclick="showTab('home')">Home</button>
     <button onclick="showTab('leaderboard')">Leaderboard</button>
     <button onclick="showTab('teams')">Teams</button>
-    <button onclick="showTab('games')">Recent Games</button>
+    <button onclick="showTab('games')">Games</button>
     <button onclick="showTab('tables')">Tables</button>
   </nav>
+
 </header>
 
 <main class="container">
 
   <!-- HOME -->
   <section id="home" class="tab active">
-    <div class="panel">
-      <h1>HMBL Dashboard</h1>
-      <p>Live league system with teams, stats and matches.</p>
+    <div class="panel hero">
+
+      <div class="hero-top">
+        LIVE HMBL SYSTEM
+      </div>
+
+      <h1>
+        The future of virtual football leagues.
+      </h1>
+
+      <p>
+        Live statistics, structured records, league tables,
+        match history and player tracking — all connected in one system.
+      </p>
+
     </div>
   </section>
 
@@ -37,7 +58,10 @@
   <section id="leaderboard" class="tab">
     <div class="panel">
       <h2>Leaderboard</h2>
-      <p class="muted">Placeholder: /leaderboard API coming soon</p>
+
+      <div class="placeholder">
+        Future leaderboard system will appear here.
+      </div>
     </div>
   </section>
 
@@ -47,7 +71,7 @@
 
       <h2>Teams</h2>
 
-      <div id="teamsList"></div>
+      <div id="teamsList" class="teams-grid"></div>
 
     </div>
   </section>
@@ -56,7 +80,10 @@
   <section id="games" class="tab">
     <div class="panel">
       <h2>Recent Games</h2>
-      <p class="muted">Placeholder: /matches API coming soon</p>
+
+      <div class="placeholder">
+        Match API integration coming soon.
+      </div>
     </div>
   </section>
 
@@ -64,9 +91,9 @@
   <section id="tables" class="tab">
     <div class="panel">
 
-      <h2>Divisions Table</h2>
+      <h2>Divisions</h2>
 
-      <div id="divisionsList"></div>
+      <div id="divisionsList" class="division-grid"></div>
 
     </div>
   </section>
