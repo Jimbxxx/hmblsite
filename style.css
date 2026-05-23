@@ -5,21 +5,21 @@ body {
   color: white;
 }
 
-/* ================= NAVBAR ================= */
+/* ================= NAV ================= */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 32px;
-  background: rgba(20, 20, 20, 0.6);
+  padding: 16px 24px;
+  background: rgba(20,20,20,0.6);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 106, 0, 0.25);
+  border-bottom: 1px solid rgba(255,106,0,0.25);
 }
 
 .logo {
   color: #ff6a00;
   font-weight: bold;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 
 .btn {
@@ -27,53 +27,43 @@ body {
   border: 1px solid #ff6a00;
   color: white;
   padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
   transition: 0.25s;
-  border-radius: 6px;
 }
 
 .btn:hover {
-  box-shadow: 0 0 18px rgba(255,106,0,0.5);
-  transform: translateY(-1px);
-}
-
-.btn.full {
-  width: 100%;
-  margin-top: 12px;
+  box-shadow: 0 0 16px rgba(255,106,0,0.5);
 }
 
 /* ================= HERO ================= */
-.container {
+.hero {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 60px 20px;
+  padding: 50px 20px;
 }
 
-.hero-card {
-  max-width: 700px;
-}
-
-/* ================= CARDS ================= */
-.card {
+.glass {
+  max-width: 720px;
+  width: 100%;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,106,0,0.2);
   backdrop-filter: blur(14px);
   border-radius: 14px;
-  padding: 28px;
-  box-shadow: 0 0 25px rgba(255,106,0,0.08);
+  padding: 32px;
+  box-shadow: 0 0 30px rgba(255,106,0,0.08);
 }
 
-.card-title {
+.tag {
   color: #ff6a00;
-  margin-bottom: 10px;
-  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 2px;
 }
 
-/* ================= TEXT ================= */
 h1 {
   color: #ff6a00;
-  margin-bottom: 15px;
+  font-size: 28px;
+  margin-bottom: 16px;
 }
 
 p {
@@ -81,29 +71,21 @@ p {
   line-height: 1.6;
 }
 
-.tag {
-  color: #ff6a00;
-  font-size: 12px;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
+.divider {
+  height: 1px;
+  background: rgba(255,106,0,0.2);
+  margin: 16px 0;
 }
 
 .highlight {
   border-top: 1px solid rgba(255,106,0,0.4);
   border-bottom: 1px solid rgba(255,106,0,0.4);
   padding: 10px 0;
-  margin-top: 15px;
 }
 
 .muted {
   opacity: 0.5;
   margin-top: 10px;
-}
-
-.divider {
-  height: 1px;
-  background: rgba(255,106,0,0.2);
-  margin: 15px 0;
 }
 
 /* ================= MODAL ================= */
@@ -117,22 +99,26 @@ p {
 }
 
 .modal-box {
+  width: 320px;
   background: rgba(20,20,20,0.9);
   border: 1px solid rgba(255,106,0,0.3);
-  padding: 30px;
   border-radius: 12px;
-  width: 320px;
-  backdrop-filter: blur(14px);
+  padding: 24px;
 }
 
 .modal input {
   width: 100%;
-  padding: 10px;
   margin-top: 10px;
+  padding: 10px;
   background: #111;
   border: 1px solid rgba(255,106,0,0.3);
   color: white;
   border-radius: 6px;
+}
+
+.full {
+  width: 100%;
+  margin-top: 12px;
 }
 
 .error {
@@ -143,14 +129,15 @@ p {
 /* ================= DASHBOARD ================= */
 .dashboard {
   display: none;
-  padding: 40px;
+  padding: 40px 20px;
 }
 
 .title {
   color: #ff6a00;
-  text-shadow: 0 0 10px rgba(255,106,0,0.4);
+  text-shadow: 0 0 10px rgba(255,106,0,0.3);
 }
 
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -158,20 +145,55 @@ p {
   margin-top: 20px;
 }
 
-.list p {
+/* CARDS */
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,106,0,0.2);
+  border-radius: 12px;
+  padding: 18px;
+  backdrop-filter: blur(14px);
+}
+
+.card h2 {
+  color: #ff6a00;
+}
+
+/* API LIST ITEMS */
+#teams p,
+#divisions p {
   margin: 8px 0;
   padding: 8px;
+  border-left: 2px solid #ff6a00;
   background: rgba(255,255,255,0.03);
   border-radius: 6px;
-  border-left: 2px solid #ff6a00;
 }
 
-/* ================= ANIMATION ================= */
-.card, .modal-box {
-  animation: fadeIn 0.5s ease;
+/* ================= RESPONSIVE ================= */
+
+/* TABLET */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(10px);}
-  to {opacity: 1; transform: translateY(0);}
+/* MOBILE */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 22px;
+  }
+
+  .glass {
+    padding: 22px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .btn {
+    width: 100%;
+  }
 }
