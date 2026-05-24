@@ -35,8 +35,8 @@ async function load() {
     const teamsJson = await teamsRes.json();
     const divJson = await divRes.json();
 
-    const teams = teamsJson.data || teamsJson || {};
-    const divisions = divJson.data || divJson || {};
+    const teams = teamsJson.data || {};
+    const divisions = divJson.data || {};
 
     renderTeams(teams);
     renderDivisions(divisions);
@@ -53,7 +53,7 @@ function renderTeams(data) {
 
   el.innerHTML = "";
 
-  Object.values(data).forEach(team => {
+  Object.values(data || {}).forEach(team => {
 
     const coManagers =
       Array.isArray(team.co_managers) && team.co_managers.length > 0
@@ -82,7 +82,7 @@ function renderDivisions(data) {
 
   el.innerHTML = "";
 
-  Object.values(data).forEach(div => {
+  Object.values(data || {}).forEach(div => {
     el.innerHTML += `
       <div class="division-pill">
         ${div.name || "Unnamed Division"}
