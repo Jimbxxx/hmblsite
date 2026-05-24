@@ -1,9 +1,30 @@
 const API = "http://api.hmbl.pro:12994";
 
-// ---------------- INIT ----------------
-document.addEventListener("DOMContentLoaded", load);
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  load();
+  setupTabs();
+  setupGlow();
+});
 
-// ---------------- LOAD ----------------
+// ================= TAB SYSTEM =================
+function setupTabs() {
+  const buttons = document.querySelectorAll("[data-tab]");
+  const tabs = document.querySelectorAll(".tab");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.getAttribute("data-tab");
+
+      tabs.forEach(t => t.classList.remove("active"));
+
+      const active = document.getElementById(target);
+      if (active) active.classList.add("active");
+    });
+  });
+}
+
+// ================= LOAD API =================
 async function load() {
   try {
     const [teamsRes, divRes] = await Promise.all([
@@ -25,7 +46,7 @@ async function load() {
   }
 }
 
-// ---------------- TEAMS ----------------
+// ================= TEAMS =================
 function renderTeams(data) {
   const el = document.getElementById("teamsList");
   if (!el) return;
@@ -41,10 +62,7 @@ function renderTeams(data) {
 
     el.innerHTML += `
       <div class="team-card">
-
-        <div class="team-name">
-          ${team.name || "Unnamed Team"}
-        </div>
+        <div class="team-name">${team.name || "Unnamed Team"}</div>
 
         <div class="team-meta">
           Division: ${team.division || "Unknown"}<br>
@@ -52,13 +70,12 @@ function renderTeams(data) {
           Co-Managers: ${coManagers}<br>
           Position: ${team.position || "TBD"}
         </div>
-
       </div>
     `;
   });
 }
 
-// ---------------- DIVISIONS ----------------
+// ================= DIVISIONS =================
 function renderDivisions(data) {
   const el = document.getElementById("divisionsList");
   if (!el) return;
@@ -66,7 +83,6 @@ function renderDivisions(data) {
   el.innerHTML = "";
 
   Object.values(data).forEach(div => {
-
     el.innerHTML += `
       <div class="division-pill">
         ${div.name || "Unnamed Division"}
@@ -75,15 +91,13 @@ function renderDivisions(data) {
   });
 }
 
-// ---------------- MOUSE GLOW ----------------
-const glow = document.getElementById("glow");
+// ================= MOUSE GLOW =================
+function setupGlow() {
+  const glow = document.getElementById("glow");
+  if (!glow) return;
 
-if (glow) {
   document.addEventListener("mousemove", e => {
     glow.style.left = e.clientX + "px";
     glow.style.top = e.clientY + "px";
   });
 }
-
-// ---------------- INIT ----------------
-load();
