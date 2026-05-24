@@ -1,4 +1,4 @@
-const API = "http://93.115.101.105:12994";
+const API = "http://api.hmbl.pro:12994";
 
 // ---------------- TABS ----------------
 function showTab(tab) {
