@@ -1,25 +1,24 @@
 const API = "http://api.hmbl.pro:12994";
 
-// ---------------- TABS ----------------
-function showTab(tab) {
-  document.querySelectorAll(".tab").forEach(t => {
-    t.classList.remove("active");
-  });
+// ---------------- INIT ----------------
+document.addEventListener("DOMContentLoaded", load);
 
-  document.getElementById(tab).classList.add("active");
-}
-
-// ---------------- API LOAD ----------------
+// ---------------- LOAD ----------------
 async function load() {
   try {
-    const teamsRes = await fetch(`${API}/teams`);
-    const divRes = await fetch(`${API}/divisions`);
+    const [teamsRes, divRes] = await Promise.all([
+      fetch(`${API}/teams`),
+      fetch(`${API}/divisions`)
+    ]);
 
-    const teams = await teamsRes.json();
-    const divisions = await divRes.json();
+    const teamsJson = await teamsRes.json();
+    const divJson = await divRes.json();
 
-    renderTeams(teams.data);
-    renderDivisions(divisions.data);
+    const teams = teamsJson.data || teamsJson || {};
+    const divisions = divJson.data || divJson || {};
+
+    renderTeams(teams);
+    renderDivisions(divisions);
 
   } catch (err) {
     console.log("API ERROR:", err);
@@ -33,10 +32,10 @@ function renderTeams(data) {
 
   el.innerHTML = "";
 
-  Object.values(data || {}).forEach(team => {
+  Object.values(data).forEach(team => {
 
     const coManagers =
-      (team.co_managers || []).length > 0
+      Array.isArray(team.co_managers) && team.co_managers.length > 0
         ? team.co_managers.join(", ")
         : "None";
 
@@ -66,7 +65,7 @@ function renderDivisions(data) {
 
   el.innerHTML = "";
 
-  Object.values(data || {}).forEach(div => {
+  Object.values(data).forEach(div => {
 
     el.innerHTML += `
       <div class="division-pill">
