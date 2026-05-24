@@ -1,4 +1,4 @@
-const API = "https://api.hmbl.pro";
+const API = "https://hmblapi.onrender.com";
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
