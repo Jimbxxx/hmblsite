@@ -2,6 +2,8 @@ const API = "https://hmblapi.onrender.com";
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("profile.html")) return;
+  
   handleAuthRedirect();
   load();
   setupTabs();
