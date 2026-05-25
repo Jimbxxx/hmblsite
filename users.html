@@ -2,83 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HMBL - User Profile</title>
-
-  <link rel="stylesheet" href="../style.css">
+  <title>User Profile - HMBL</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="bg-glow" id="glow"></div>
+<div class="container">
 
-<header class="nav">
+  <div class="panel" id="profile">
 
-  <div class="logo">
-    <img src="../assets/logo.png" class="logo-img" alt="HMBL">
+    <h2>Loading profile...</h2>
+
   </div>
 
-  <nav class="links">
-    <button onclick="window.location.href='/'">Home</button>
-    <button onclick="window.location.href='/#teams'">Teams</button>
-    <button onclick="window.location.href='/#leaderboard'">Leaderboard</button>
-  </nav>
+</div>
 
-</header>
+<script src="config.js"></script>
+<script src="auth.js"></script>
 
-<main class="container">
+<script>
+const API = CONFIG.API_BASE;
 
-  <!-- PROFILE CARD -->
-  <section class="panel" id="profilePanel">
+// ================= GET USER FROM URL =================
+function getUsernameFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("u");
+}
 
-    <div class="profile-header">
+// ================= LOAD PROFILE =================
+async function loadProfile() {
 
-      <img id="profilePfp" class="profile-pfp" src="" alt="PFP">
+  const username = getUsernameFromURL();
 
-      <div class="profile-info">
-        <h1 id="profileUsername">Loading...</h1>
-        <p id="profileTeam">Team: -</p>
-        <p id="profilePosition">Position: -</p>
+  if (!username) {
+    document.getElementById("profile").innerHTML = "<h2>User not found</h2>";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/players`);
+    const json = await res.json();
+
+    const players = Object.values(json.data || {});
+    const user = players.find(p => p.username === username);
+
+    if (!user) {
+      document.getElementById("profile").innerHTML = "<h2>User not found</h2>";
+      return;
+    }
+
+    renderProfile(user);
+
+    // optional: increase profile views
+    fetch(`${API}/players/increment-view`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username })
+    });
+
+  } catch (err) {
+    console.log(err);
+    document.getElementById("profile").innerHTML = "<h2>Error loading profile</h2>";
+  }
+}
+
+// ================= RENDER =================
+function renderProfile(user) {
+
+  const isOwner =
+    getCurrentUser() &&
+    getCurrentUser().username === user.username;
+
+  document.getElementById("profile").innerHTML = `
+    <div style="display:flex;gap:20px;align-items:center;">
+
+      <img src="${user.pfp || ''}" style="width:80px;height:80px;border-radius:50%;background:#111;" />
+
+      <div>
+        <h2>${user.username}</h2>
+        <p>${user.position || "No position set"}</p>
       </div>
 
     </div>
 
-    <div class="profile-stats">
+    <hr style="margin:20px 0;opacity:0.1">
 
-      <div class="stat">
-        <div class="stat-number" id="statPoints">0</div>
-        <div class="stat-label">Points</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-number" id="statGoals">0</div>
-        <div class="stat-label">Goals</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-number" id="statAssists">0</div>
-        <div class="stat-label">Assists</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-number" id="statCS">0</div>
-        <div class="stat-label">Clean Sheets</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-number" id="statViews">0</div>
-        <div class="stat-label">Profile Views</div>
-      </div>
-
+    <div>
+      <p>Goals: ${user.goals}</p>
+      <p>Assists: ${user.assists}</p>
+      <p>Points: ${user.points}</p>
+      <p>Clean Sheets: ${user.clean_sheets}</p>
+      <p>Profile Views: ${user.profile_views}</p>
     </div>
 
-  </section>
+    ${isOwner ? `
+      <button onclick="editProfile()">Edit Profile</button>
+    ` : ""}
+  `;
+}
 
-</main>
+// ================= EDIT BUTTON =================
+function editProfile() {
+  alert("We’ll build edit system next (same setup page system).");
+}
 
-<script src="../script.js"></script>
-<script src="../auth.js"></script>
-<script src="../user.js"></script>
+// start
+loadProfile();
+</script>
 
 </body>
 </html>
