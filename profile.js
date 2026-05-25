@@ -1,13 +1,12 @@
 const API = CONFIG.API_BASE;
 
-// ================= LOAD PROFILE =================
-async function loadProfile() {
-  const token = localStorage.getItem("hmbl_token");
+let CURRENT = null;
 
-  if (!token) {
-    window.location.href = "/";
-    return;
-  }
+// ================= LOAD =================
+async function loadProfile() {
+
+  const token = localStorage.getItem("hmbl_token");
+  if (!token) return (window.location.href = "/");
 
   const res = await fetch(`${API}/auth/me`, {
     headers: {
@@ -17,31 +16,29 @@ async function loadProfile() {
 
   const json = await res.json();
 
-  if (!json.user) return;
+  if (json.status !== "success") return;
 
-  const usernameInput = document.getElementById("username");
-  const positionInput = document.getElementById("position");
+  CURRENT = json;
 
-  usernameInput.value = json.user.username || "";
-  positionInput.value = json.user.position || "";
+  document.getElementById("username").value = json.user.username || "";
+  document.getElementById("position").value = json.profile?.position || "";
 
-  // fetch full player data (pfp)
-  const playersRes = await fetch(`${API}/players`);
-  const playersJson = await playersRes.json();
+  const pfp = json.profile?.pfp;
+  if (pfp) document.getElementById("pfp").src = pfp;
 
-  const players = playersJson.data;
+  // hide skip if NOT new user
+  const url = new URL(window.location.href);
+  const isNew = url.searchParams.get("new");
 
-  const player = Object.values(players).find(
-    p => p.discord_id === json.user.discord_id
-  );
-
-  if (player && player.pfp) {
-    document.getElementById("pfp").src = player.pfp;
+  if (isNew === "false") {
+    document.getElementById("title").innerText = "Edit Profile";
+    document.getElementById("skipBtn").style.display = "none";
   }
 }
 
-// ================= SAVE PROFILE =================
+// ================= SAVE =================
 async function saveProfile() {
+
   const token = localStorage.getItem("hmbl_token");
 
   const username = document.getElementById("username").value;
@@ -67,5 +64,4 @@ function skipProfile() {
   window.location.href = "/";
 }
 
-// auto run
 loadProfile();
