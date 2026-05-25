@@ -52,29 +52,27 @@ async function loadProfile() {
       p => p.discord_id === auth.user.discord_id
     );
 
-    // ================= PFP (SAFE FIX) =================
+    // ================= PFP =================
     const pfpEl = document.getElementById("pfp");
-
+    
     function setPfp(url) {
       if (!pfpEl) return;
-
+    
+      const cleanUrl = url ? url + "?t=" + Date.now() : null;
+    
       pfpEl.onerror = () => {
         pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       };
-
-      if (url && typeof url === "string" && url.length > 10) {
-        pfpEl.src = url;
+    
+      if (cleanUrl) {
+        pfpEl.src = cleanUrl;
       } else {
         pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       }
     }
-
-    // PRIORITY ORDER
-    setPfp(
-      CURRENT_PLAYER?.pfp ||
-      auth.user.avatar_url ||
-      null
-    );
+    
+    // 🔥 THIS IS WHAT YOU MISSED:
+    setPfp(CURRENT_PLAYER?.pfp);
 
     // ================= POSITION =================
     const posEl = document.getElementById("position");
