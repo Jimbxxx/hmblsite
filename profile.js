@@ -48,10 +48,10 @@ async function loadProfile() {
     const players = Object.values(playersJson.data || {});
 
     CURRENT_PLAYER = players.find(
-      p => p.discord_id === auth.user.discord_id
+      p => String(p.discord_id) === String(auth.user.discord_id)
     );
 
-    // ================= PFP FIX (IMPORTANT) =================
+    // ================= PFP (CLEAN + RELIABLE) =================
     const pfpEl = document.getElementById("pfp");
 
     if (pfpEl) {
@@ -61,9 +61,9 @@ async function loadProfile() {
         pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       };
 
-      // FORCE CLEAN SET
       if (pfpUrl) {
-        pfpEl.src = pfpUrl;
+        // cache-bust to avoid Discord/CDN caching issues
+        pfpEl.src = pfpUrl + "?t=" + Date.now();
       } else {
         pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       }
@@ -97,7 +97,10 @@ async function saveProfile() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ username, position })
+      body: JSON.stringify({
+        username,
+        position
+      })
     });
 
     window.location.href = "/";
