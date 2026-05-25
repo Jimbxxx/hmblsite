@@ -33,20 +33,11 @@ async function loadProfile() {
 
     CURRENT_USER = json.user;
 
-    // username from JWT
+    // ================= USERNAME =================
     document.getElementById("username").value =
       json.user.username || "";
 
-    // ALWAYS try Discord avatar first (important fix)
-    const discordId = json.user.discord_id;
-
-    if (discordId) {
-      const avatar = `https://cdn.discordapp.com/avatars/${discordId}/${json.user.avatar || ""}.png`;
-
-      document.getElementById("pfp").src = avatar;
-    }
-
-    // fallback position from API
+    // ================= PFP FIX (SUPABASE FIRST) =================
     const playersRes = await fetch(`${API}/players`);
     const playersJson = await playersRes.json();
 
@@ -54,6 +45,20 @@ async function loadProfile() {
       p => p.discord_id === json.user.discord_id
     );
 
+    const pfpEl = document.getElementById("pfp");
+
+    if (player?.pfp) {
+      // Supabase stored pfp (BEST SOURCE)
+      pfpEl.src = player.pfp;
+    } else if (json.user.discord_id && json.user.avatar) {
+      // Discord fallback
+      pfpEl.src = `https://cdn.discordapp.com/avatars/${json.user.discord_id}/${json.user.avatar}.png`;
+    } else {
+      // final fallback (prevents broken image)
+      pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+    }
+
+    // ================= POSITION =================
     if (player?.position) {
       document.getElementById("position").value = player.position;
     }
@@ -72,16 +77,24 @@ async function saveProfile() {
 
   if (!username) return;
 
-  await fetch(`${API}/players/update-profile`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({ username, position })
-  });
+  try {
+    await fetch(`${API}/players/update-profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        username,
+        position
+      })
+    });
 
-  window.location.href = "/";
+    window.location.href = "/";
+
+  } catch (err) {
+    console.log("Save error:", err);
+  }
 }
 
 // ================= SKIP =================
@@ -89,6 +102,6 @@ function skipProfile() {
   window.location.href = "/";
 }
 
-// expose to HTML
+// expose to HTML buttons
 window.saveProfile = saveProfile;
 window.skipProfile = skipProfile;
