@@ -2,13 +2,15 @@ const API = "https://hmblapi.onrender.com";
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.includes("profile.html")) return;
-  
   handleAuthRedirect();
-  load();
-  setupTabs();
-  setupGlow();
+
   setupAuthUI();
+
+  if (!window.location.pathname.includes("profile.html")) {
+    load();
+    setupTabs();
+    setupGlow();
+  }
 });
 
 // ================= TOKEN HANDLER =================
@@ -126,22 +128,26 @@ function setupAuthUI() {
     };
   }
 
-  // AUTH STATE UI
-  if (token) {
-    if (loginBtn) loginBtn.style.display = "none";
-    if (profileBtn) profileBtn.style.display = "inline-block";
+  // small delay fix (IMPORTANT)
+  setTimeout(() => {
+    const tokenNow = localStorage.getItem("hmbl_token");
 
-    if (profileBtn && !profileBtn.dataset.bound) {
-      profileBtn.dataset.bound = "true";
+    if (tokenNow) {
+      if (loginBtn) loginBtn.style.display = "none";
+      if (profileBtn) profileBtn.style.display = "inline-block";
 
-      profileBtn.onclick = () => {
-        window.location.href = "/profile.html";
-      };
+      if (profileBtn && !profileBtn.dataset.bound) {
+        profileBtn.dataset.bound = "true";
+
+        profileBtn.onclick = () => {
+          window.location.href = "/profile.html";
+        };
+      }
+    } else {
+      if (loginBtn) loginBtn.style.display = "inline-block";
+      if (profileBtn) profileBtn.style.display = "none";
     }
-  } else {
-    if (loginBtn) loginBtn.style.display = "inline-block";
-    if (profileBtn) profileBtn.style.display = "none";
-  }
+  }, 50);
 }
 
 // ================= PROFILE PAGE =================
