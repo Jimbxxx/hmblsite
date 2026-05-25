@@ -1,41 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>HMBL Setup</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HMBL | Profile</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="profile-container">
+  <!-- background glow (same as index) -->
+  <div class="bg-glow" id="glow"></div>
 
-    <h1 id="title">Complete Your Profile</h1>
+  <!-- NAV (same style as main site) -->
+  <header class="nav">
 
-    <img id="pfp" class="profile-pfp" />
-
-    <div class="profile-info">
-
-      <label>Username</label>
-      <input id="username" type="text" />
-
-      <label>Position</label>
-      <input id="position" type="text" placeholder="ST, CM, GK..." />
-
+    <div class="logo">
+      <img src="assets/logo.png" alt="HMBL" class="logo-img">
     </div>
 
-    <div class="profile-buttons">
+    <nav class="links">
 
-      <button onclick="saveProfile()">Save</button>
+      <button onclick="goHome()">Home</button>
+      <button onclick="goProfile()">Profile</button>
 
-      <button id="skipBtn" onclick="skipProfile()">
-        Skip
+      <button id="logoutBtn" onclick="logout()" style="display:none">
+        Logout
       </button>
 
-    </div>
+    </nav>
 
-  </div>
+  </header>
 
+  <!-- MAIN -->
+  <main class="container">
+
+    <section class="tab active">
+
+      <div class="panel hero">
+
+        <div class="hero-top">
+          PROFILE SYSTEM
+        </div>
+
+        <h1 id="title">
+          Complete Your Profile
+        </h1>
+
+        <p>
+          Set your username and position for league registration.
+        </p>
+
+        <!-- PROFILE CARD -->
+        <div class="profile-card">
+
+          <img id="pfp" class="profile-pfp" />
+
+          <div class="profile-form">
+
+            <label>Username</label>
+            <input id="username" type="text" placeholder="Enter username" />
+
+            <label>Position</label>
+            <input id="position" type="text" placeholder="ST, CM, GK..." />
+
+          </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="profile-buttons">
+
+          <button onclick="saveProfile()">
+            Save Profile
+          </button>
+
+          <button id="skipBtn" onclick="skipProfile()">
+            Skip
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- SCRIPTS -->
   <script src="config.js"></script>
+  <script src="auth-state.js"></script>
+  <script src="script.js"></script>
   <script src="profile.js"></script>
 
 </body>
