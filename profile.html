@@ -10,25 +10,19 @@
 
 <body>
 
-  <!-- background glow (same as index) -->
   <div class="bg-glow" id="glow"></div>
 
-  <!-- NAV (same style as main site) -->
+  <!-- NAV -->
   <header class="nav">
 
     <div class="logo">
-      <img src="assets/logo.png" alt="HMBL" class="logo-img">
+      <img src="assets/logo.png" class="logo-img">
     </div>
 
     <nav class="links">
-
       <button onclick="goHome()">Home</button>
       <button onclick="goProfile()">Profile</button>
-
-      <button id="logoutBtn" onclick="logout()" style="display:none">
-        Logout
-      </button>
-
+      <button id="logoutBtn" onclick="logout()" style="display:none">Logout</button>
     </nav>
 
   </header>
@@ -40,19 +34,12 @@
 
       <div class="panel hero">
 
-        <div class="hero-top">
-          PROFILE SYSTEM
-        </div>
+        <div class="hero-top">PROFILE SYSTEM</div>
 
-        <h1 id="title">
-          Complete Your Profile
-        </h1>
+        <h1 id="title">Complete Your Profile</h1>
 
-        <p>
-          Set your username and position for league registration.
-        </p>
+        <p>Set your username and position.</p>
 
-        <!-- PROFILE CARD -->
         <div class="profile-card">
 
           <img id="pfp" class="profile-pfp" />
@@ -60,25 +47,19 @@
           <div class="profile-form">
 
             <label>Username</label>
-            <input id="username" type="text" placeholder="Enter username" />
+            <input id="username" type="text">
 
             <label>Position</label>
-            <input id="position" type="text" placeholder="ST, CM, GK..." />
+            <input id="position" type="text" placeholder="ST, CM, GK">
 
           </div>
 
         </div>
 
-        <!-- BUTTONS -->
         <div class="profile-buttons">
 
-          <button onclick="saveProfile()">
-            Save Profile
-          </button>
-
-          <button id="skipBtn" onclick="skipProfile()">
-            Skip
-          </button>
+          <button onclick="saveProfile()">Save</button>
+          <button id="skipBtn" onclick="skipProfile()">Skip</button>
 
         </div>
 
@@ -88,10 +69,9 @@
 
   </main>
 
-  <!-- SCRIPTS -->
+  <!-- ONLY THESE SCRIPTS -->
   <script src="config.js"></script>
   <script src="auth-state.js"></script>
-  <script src="script.js"></script>
   <script src="profile.js"></script>
 
 </body>
