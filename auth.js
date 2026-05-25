@@ -16,9 +16,10 @@ function login() {
 
   if (token) {
     localStorage.setItem("hmbl_token", token);
-
-    // remove token from URL
+  
     window.history.replaceState({}, document.title, window.location.pathname);
+  
+    window.location.href = "/profile.html";
   }
 })();
 
