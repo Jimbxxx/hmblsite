@@ -278,3 +278,93 @@ body {
     font-size: 30px;
   }
 }
+
+
+/* ================= PROFILE PAGE ================= */
+
+.profile-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+
+  margin-top: 25px;
+
+  background: #0d0d0d;
+  border: 1px solid rgba(255,106,0,0.12);
+  border-radius: 16px;
+
+  padding: 20px;
+}
+
+.profile-pfp {
+  width: 90px;
+  height: 90px;
+
+  border-radius: 50%;
+  background: #111;
+
+  border: 1px solid rgba(255,106,0,0.2);
+  object-fit: cover;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  width: 100%;
+}
+
+.profile-form label {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: -6px;
+}
+
+.profile-form input {
+  padding: 10px 12px;
+
+  background: #050505;
+  border: 1px solid rgba(255,106,0,0.12);
+
+  color: white;
+
+  border-radius: 10px;
+  outline: none;
+
+  transition: 0.2s;
+}
+
+.profile-form input:focus {
+  border-color: rgba(255,106,0,0.4);
+  box-shadow: 0 0 18px rgba(255,106,0,0.12);
+}
+
+.profile-buttons {
+  display: flex;
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.profile-buttons button {
+  flex: 1;
+
+  padding: 12px;
+
+  background: #0d0d0d;
+  border: 1px solid rgba(255,106,0,0.15);
+
+  color: white;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.profile-buttons button:hover {
+  border-color: rgba(255,106,0,0.35);
+  transform: translateY(-2px);
+}
