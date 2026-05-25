@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HMBL Setup</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="panel">
+
+    <h2>Complete your profile</h2>
+
+    <p>We pre-filled your info from Discord. You can edit anything before continuing.</p>
+
+    <br>
+
+    <label>Username</label>
+    <input id="username" type="text" />
+
+    <br><br>
+
+    <label>Position</label>
+    <input id="position" type="text" placeholder="e.g ST, GK, CB" />
+
+    <br><br>
+
+    <button onclick="saveProfile()">Save & Continue</button>
+    <button onclick="skipProfile()">Skip</button>
+
+  </div>
+
+</div>
+
+<script src="config.js"></script>
+<script src="auth.js"></script>
+
+<script>
+const API = CONFIG.API_BASE;
+
+let user = null;
+
+// load auth
+window.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem("hmbl_token");
+
+  if (!token) {
+    window.location.href = "/";
+    return;
+  }
+
+  const res = await fetch(`${API}/auth/me`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  const data = await res.json();
+
+  if (data.status !== "success") {
+    window.location.href = "/";
+    return;
+  }
+
+  user = data.user;
+
+  document.getElementById("username").value = user.username || "";
+});
+
+// SAVE PROFILE
+async function saveProfile() {
+  const username = document.getElementById("username").value;
+  const position = document.getElementById("position").value;
+
+  const token = localStorage.getItem("hmbl_token");
+
+  const res = await fetch(`${API}/players/update-profile`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      username,
+      position
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.status === "success") {
+    window.location.href = `/users/${username}`;
+  }
+}
+
+// SKIP PROFILE
+function skipProfile() {
+  window.location.href = "/";
+}
+</script>
+
+</body>
+</html>
