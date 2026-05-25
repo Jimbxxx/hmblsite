@@ -4,27 +4,25 @@ let CURRENT_USER = null;
 
 // ================= LOAD PROFILE =================
 async function loadProfile() {
-
   const token = localStorage.getItem("hmbl_token");
+  if (!token) return (window.location.href = "/");
 
+  // UI state
   const url = new URL(window.location.href);
   const isNew = url.searchParams.get("new");
-  
-  if (isNew !== "false") {
-    document.getElementById("title").innerText = "Complete Your Profile";
-    document.getElementById("skipBtn").style.display = "inline-block";
-  } else {
-    document.getElementById("title").innerText = "Edit Profile";
-    document.getElementById("skipBtn").style.display = "none";
-  }
 
-  if (!token) {
-    window.location.href = "/";
-    return;
+  const title = document.getElementById("title");
+  const skipBtn = document.getElementById("skipBtn");
+
+  if (isNew === "false") {
+    if (title) title.innerText = "Edit Profile";
+    if (skipBtn) skipBtn.style.display = "none";
+  } else {
+    if (title) title.innerText = "Complete Your Profile";
+    if (skipBtn) skipBtn.style.display = "inline-block";
   }
 
   try {
-    // get auth user (JWT)
     const res = await fetch(`${API}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -35,16 +33,15 @@ async function loadProfile() {
 
     if (json.status !== "success") {
       localStorage.removeItem("hmbl_token");
-      window.location.href = "/";
-      return;
+      return (window.location.href = "/");
     }
 
     CURRENT_USER = json.user;
 
-    // fill basic JWT data
-    document.getElementById("username").value = json.user.username || "";
+    const usernameEl = document.getElementById("username");
+    if (usernameEl) usernameEl.value = json.user.username || "";
 
-    // fetch full player data (pfp + position)
+    // fetch player data
     const playersRes = await fetch(`${API}/players`);
     const playersJson = await playersRes.json();
 
@@ -55,23 +52,11 @@ async function loadProfile() {
     );
 
     if (player) {
+      if (document.getElementById("position"))
+        document.getElementById("position").value = player.position || "";
 
-      if (player.position) {
-        document.getElementById("position").value = player.position;
-      }
-
-      if (player.pfp) {
+      if (player.pfp && document.getElementById("pfp"))
         document.getElementById("pfp").src = player.pfp;
-      }
-    }
-
-    // check if new user
-    const url = new URL(window.location.href);
-    const isNew = url.searchParams.get("new");
-
-    if (isNew === "false") {
-      document.getElementById("title").innerText = "Edit Profile";
-      document.getElementById("skipBtn").style.display = "none";
     }
 
   } catch (err) {
@@ -80,34 +65,25 @@ async function loadProfile() {
   }
 }
 
-// ================= SAVE PROFILE =================
+// ================= SAVE =================
 async function saveProfile() {
-
   const token = localStorage.getItem("hmbl_token");
 
-  const username = document.getElementById("username").value;
-  const position = document.getElementById("position").value;
+  const username = document.getElementById("username")?.value;
+  const position = document.getElementById("position")?.value;
 
   if (!username) return;
 
-  try {
-    await fetch(`${API}/players/update-profile`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        username,
-        position
-      })
-    });
+  await fetch(`${API}/players/update-profile`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ username, position })
+  });
 
-    window.location.href = "/";
-
-  } catch (err) {
-    console.log("Save error:", err);
-  }
+  window.location.href = "/";
 }
 
 // ================= SKIP =================
@@ -115,5 +91,4 @@ function skipProfile() {
   window.location.href = "/";
 }
 
-// auto run
 loadProfile();
