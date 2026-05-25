@@ -15,23 +15,23 @@ async function loadProfile() {
   }
 
   try {
-    const res = await fetch(`${API}/auth/me`, {
+    // ================= AUTH =================
+    const authRes = await fetch(`${API}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
 
-    const json = await res.json();
+    const auth = await authRes.json();
+    console.log("AUTH:", auth);
 
-    console.log("AUTH RESPONSE:", json);
-
-    if (json.status !== "success") {
+    if (auth.status !== "success") {
       localStorage.removeItem("hmbl_token");
       window.location.href = "/";
       return;
     }
 
-    const user = json.user;
+    const user = auth.user;
 
     // ================= USERNAME =================
     const usernameEl = document.getElementById("username");
@@ -45,15 +45,29 @@ async function loadProfile() {
       positionEl.value = user.position || "";
     }
 
-    // ================= PFP (WORKING) =================
+    // ================= GET PLAYERS (REAL PFP SOURCE) =================
+    const playersRes = await fetch(`${API}/players`);
+    const playersJson = await playersRes.json();
+
+    console.log("PLAYERS:", playersJson);
+
+    const players = Object.values(playersJson.data || {});
+
+    const player = players.find(
+      p => p.discord_id === user.discord_id
+    );
+
+    console.log("MATCHED PLAYER:", player);
+
+    // ================= PFP FIX =================
     const pfpEl = document.getElementById("pfp");
 
     if (pfpEl) {
       const url =
-        user.pfp ||
+        player?.pfp ||
         "https://cdn.discordapp.com/embed/avatars/0.png";
 
-      console.log("SETTING PFP:", url);
+      console.log("PFP URL:", url);
 
       pfpEl.src = url;
 
@@ -63,7 +77,7 @@ async function loadProfile() {
     }
 
   } catch (err) {
-    console.log("Profile load error:", err);
+    console.log("PROFILE ERROR:", err);
   }
 }
 
@@ -74,10 +88,7 @@ async function saveProfile() {
   const username = document.getElementById("username")?.value?.trim();
   const position = document.getElementById("position")?.value?.trim();
 
-  if (!username) {
-    alert("Username required");
-    return;
-  }
+  if (!username) return;
 
   try {
     const res = await fetch(`${API}/players/update-profile`, {
@@ -93,17 +104,14 @@ async function saveProfile() {
     });
 
     const json = await res.json();
-
-    console.log("SAVE RESPONSE:", json);
+    console.log("SAVE:", json);
 
     if (json.status === "success") {
       window.location.href = "/";
-    } else {
-      alert("Failed to save profile");
     }
 
   } catch (err) {
-    console.log("Save error:", err);
+    console.log("SAVE ERROR:", err);
   }
 }
 
@@ -112,6 +120,5 @@ function skipProfile() {
   window.location.href = "/";
 }
 
-// expose to HTML
 window.saveProfile = saveProfile;
 window.skipProfile = skipProfile;
