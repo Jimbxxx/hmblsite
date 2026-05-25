@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAuth();
 });
 
-// ================= AUTH CHECK =================
+// ================= MAIN AUTH CHECK =================
 async function initAuth() {
   const token = localStorage.getItem("hmbl_token");
 
@@ -29,9 +29,7 @@ async function initAuth() {
 
     const data = await res.json();
 
-    if (data.status !== "success") {
-      throw new Error("Invalid auth");
-    }
+    if (data.status !== "success") throw new Error("invalid");
 
     CURRENT_USER = data.user;
 
@@ -54,24 +52,6 @@ function setLoggedIn() {
   if (loginBtn) loginBtn.style.display = "none";
   if (profileBtn) profileBtn.style.display = "inline-block";
   if (logoutBtn) logoutBtn.style.display = "inline-block";
-
-  // prevent duplicate listeners
-  if (profileBtn && !profileBtn.dataset.bound) {
-    profileBtn.dataset.bound = "true";
-
-    profileBtn.onclick = () => {
-      const user = CURRENT_USER;
-      if (user?.username) {
-        window.location.href = `/users.html?u=${user.username}`;
-      }
-    };
-  }
-
-  if (logoutBtn && !logoutBtn.dataset.bound) {
-    logoutBtn.dataset.bound = "true";
-
-    logoutBtn.onclick = logout;
-  }
 }
 
 function setLoggedOut() {
@@ -84,12 +64,11 @@ function setLoggedOut() {
   if (logoutBtn) logoutBtn.style.display = "none";
 }
 
-// ================= GET USER =================
+// ================= HELPERS =================
 function getCurrentUser() {
   return CURRENT_USER;
 }
 
-// ================= LOGOUT =================
 function logout() {
   localStorage.removeItem("hmbl_token");
   CURRENT_USER = null;
