@@ -17,6 +17,7 @@ async function loadProfile() {
   }
 
   try {
+    // ================= AUTH =================
     const res = await fetch(`${API}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -37,25 +38,32 @@ async function loadProfile() {
     document.getElementById("username").value =
       json.user.username || "";
 
-    // ================= PFP FIX (SUPABASE FIRST) =================
+    const pfpEl = document.getElementById("pfp");
+
+    // ================= GET PLAYERS =================
     const playersRes = await fetch(`${API}/players`);
     const playersJson = await playersRes.json();
 
-    const player = Object.values(playersJson.data || {}).find(
+    const playersObj = playersJson.data || {};
+    const playersList = Object.values(playersObj);
+
+    const player = playersList.find(
       p => p.discord_id === json.user.discord_id
     );
 
-    const pfpEl = document.getElementById("pfp");
+    console.log("PLAYER FOUND:", player);
 
+    // ================= PFP (FINAL FIX) =================
     if (player?.pfp) {
-      // Supabase stored pfp (BEST SOURCE)
       pfpEl.src = player.pfp;
+
     } else if (json.user.discord_id && json.user.avatar) {
-      // Discord fallback
-      pfpEl.src = `https://cdn.discordapp.com/avatars/${json.user.discord_id}/${json.user.avatar}.png`;
+      pfpEl.src =
+        `https://cdn.discordapp.com/avatars/${json.user.discord_id}/${json.user.avatar}.png`;
+
     } else {
-      // final fallback (prevents broken image)
-      pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+      pfpEl.src =
+        "https://cdn.discordapp.com/embed/avatars/0.png";
     }
 
     // ================= POSITION =================
@@ -102,6 +110,6 @@ function skipProfile() {
   window.location.href = "/";
 }
 
-// expose to HTML buttons
+// expose to HTML
 window.saveProfile = saveProfile;
 window.skipProfile = skipProfile;
