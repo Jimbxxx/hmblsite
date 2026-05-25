@@ -7,58 +7,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ================= LOAD PROFILE =================
 async function loadProfile() {
+
   const username = getUsernameFromURL();
 
-  if (!username) return;
-
-  const player = await getPlayerByUsername(username);
-
-  if (!player) {
-    document.getElementById("profileUsername").innerText = "User not found";
+  if (!username) {
+    showError("User not found");
     return;
   }
 
-  renderProfile(player);
+  try {
+
+    const res = await fetch(`${API}/players`);
+    const json = await res.json();
+
+    const players = Object.values(json.data || {});
+
+    const player = players.find(
+      p => p.username === username
+    );
+
+    if (!player) {
+      showError("User not found");
+      return;
+    }
+
+    renderProfile(player);
+
+    // increment views (safe fire-and-forget)
+    fetch(`${API}/players/increment-view`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username })
+    }).catch(() => {});
+
+  } catch (err) {
+    console.log(err);
+    showError("Error loading profile");
+  }
 }
 
-// ================= GET USERNAME FROM URL =================
+// ================= GET USERNAME =================
 function getUsernameFromURL() {
-  const path = window.location.pathname;
-
-  // /users/theirname
-  const parts = path.split("/");
-
+  const parts = window.location.pathname.split("/");
   return parts[parts.length - 1];
 }
 
-// ================= RENDER PROFILE =================
+// ================= RENDER =================
 function renderProfile(player) {
 
-  document.getElementById("profileUsername").innerText =
-    player.username || "Unknown";
+  const el = document.getElementById("profile");
 
-  document.getElementById("profilePfp").src =
-    player.pfp || "";
+  el.innerHTML = `
+    <div class="profile-header">
 
-  document.getElementById("profileTeam").innerText =
-    `Team: ${player.team_id || "None"}`;
+      <img 
+        src="${player.pfp || ""}" 
+        class="profile-avatar"
+      />
 
-  document.getElementById("profilePosition").innerText =
-    `Position: ${player.position || "Unknown"}`;
+      <div>
+        <h2>${player.username || "Unknown"}</h2>
+        <p>${player.position || "No position set"}</p>
+        <p>Team: ${player.team_id || "None"}</p>
+      </div>
 
-  // stats (default safe values)
-  document.getElementById("statPoints").innerText =
-    player.points || 0;
+    </div>
 
-  document.getElementById("statGoals").innerText =
-    player.goals || 0;
+    <hr class="divider">
 
-  document.getElementById("statAssists").innerText =
-    player.assists || 0;
+    <div class="stats">
 
-  document.getElementById("statCS").innerText =
-    player.clean_sheets || 0;
+      <div>Goals: ${player.goals || 0}</div>
+      <div>Assists: ${player.assists || 0}</div>
+      <div>Points: ${player.points || 0}</div>
+      <div>Clean Sheets: ${player.clean_sheets || 0}</div>
+      <div>Profile Views: ${player.profile_views || 0}</div>
 
-  document.getElementById("statViews").innerText =
-    player.profile_views || 0;
+    </div>
+  `;
+}
+
+// ================= ERROR =================
+function showError(msg) {
+  const el = document.getElementById("profile");
+
+  if (!el) return;
+
+  el.innerHTML = `<h2>${msg}</h2>`;
 }
