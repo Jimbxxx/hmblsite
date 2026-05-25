@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   load();
   setupTabs();
   setupGlow();
+  setupLoginUI();
 });
 
 // ================= TAB SYSTEM =================
@@ -100,4 +101,31 @@ function setupGlow() {
     glow.style.left = e.clientX + "px";
     glow.style.top = e.clientY + "px";
   });
+}
+
+// ================= AUTH UI (NEW) =================
+function setupLoginUI() {
+  const loginBtn = document.getElementById("loginBtn");
+  const profileBtn = document.getElementById("profileBtn");
+
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      window.location.href = `${API}/auth/discord/login`;
+    });
+  }
+
+  // check if user is logged in
+  const token = localStorage.getItem("hmbl_token");
+
+  if (token) {
+    if (loginBtn) loginBtn.style.display = "none";
+    if (profileBtn) profileBtn.style.display = "inline-block";
+
+    profileBtn.addEventListener("click", () => {
+      const user = JSON.parse(localStorage.getItem("hmbl_user"));
+      if (user?.username) {
+        window.location.href = `/users/${user.username}`;
+      }
+    });
+  }
 }
