@@ -69,21 +69,47 @@ async function loadProfile() {
 async function saveProfile() {
   const token = localStorage.getItem("hmbl_token");
 
-  const username = document.getElementById("username")?.value;
-  const position = document.getElementById("position")?.value;
+  const username = document.getElementById("username").value;
+  const position = document.getElementById("position").value;
 
-  if (!username) return;
+  const status = document.getElementById("status");
+  status.innerText = "Saving...";
 
-  await fetch(`${API}/players/update-profile`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({ username, position })
-  });
+  if (!username) {
+    status.innerText = "Username required";
+    return;
+  }
 
-  window.location.href = "/";
+  try {
+    const res = await fetch(`${API}/players/update-profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        username,
+        position
+      })
+    });
+
+    const json = await res.json();
+
+    if (json.status !== "success") {
+      status.innerText = "Failed to save";
+      return;
+    }
+
+    status.innerText = "Saved successfully";
+
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 600);
+
+  } catch (err) {
+    console.log(err);
+    status.innerText = "Server error";
+  }
 }
 
 // ================= SKIP =================
