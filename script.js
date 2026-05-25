@@ -6,7 +6,24 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTabs();
   setupGlow();
   setupLoginUI();
+  handleAuthRedirect();
 });
+
+function handleAuthRedirect() {
+  const url = new URL(window.location.href);
+  const token = url.searchParams.get("token");
+
+  if (!token) return;
+
+  // save token
+  localStorage.setItem("hmbl_token", token);
+
+  // clean URL (important)
+  window.history.replaceState({}, document.title, "/");
+
+  // reload UI state
+  location.reload();
+}
 
 // ================= TAB SYSTEM =================
 function setupTabs() {
