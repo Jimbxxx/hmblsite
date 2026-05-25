@@ -31,15 +31,13 @@
     <button data-tab="teams">Teams</button>
     <button data-tab="games">Games</button>
     <button data-tab="tables">Tables</button>
-
-    <!-- AUTH BUTTON (NEW) -->
-    <button id="loginBtn" class="login-btn">Login</button>
-
-    <!-- PROFILE BUTTON (hidden until login) -->
-    <button id="profileBtn" class="profile-btn" style="display:none;">
+  
+    <button id="loginBtn" onclick="login()">Login</button>
+  
+    <button id="profileBtn" style="display:none" onclick="goProfile()">
       Profile
     </button>
-
+  
   </nav>
 
 </header>
