@@ -2,15 +2,19 @@ const API = "https://hmblapi.onrender.com";
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
-  handleAuthRedirect();
+  // HARD GUARD: prevent double execution
+  if (window.__HMBL_INIT__) return;
+  window.__HMBL_INIT__ = true;
 
+  handleAuthRedirect();
   setupAuthUI();
 
-  if (!window.location.pathname.includes("profile.html")) {
-    load();
-    setupTabs();
-    setupGlow();
-  }
+  // DO NOT run homepage logic on profile page
+  if (window.location.pathname.includes("profile.html")) return;
+
+  load();
+  setupTabs();
+  setupGlow();
 });
 
 // ================= TOKEN HANDLER =================
@@ -20,7 +24,12 @@ function handleAuthRedirect() {
 
   if (!token) return;
 
+  // prevent repeated writes
+  if (localStorage.getItem("hmbl_token") === token) return;
+
   localStorage.setItem("hmbl_token", token);
+
+  // clean URL without reload
   window.history.replaceState({}, document.title, "/");
 }
 
@@ -29,15 +38,17 @@ function setupTabs() {
   const buttons = document.querySelectorAll("[data-tab]");
   const tabs = document.querySelectorAll(".tab");
 
+  if (!buttons.length || !tabs.length) return;
+
   buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.onclick = () => {
       const target = btn.getAttribute("data-tab");
 
       tabs.forEach(t => t.classList.remove("active"));
 
       const active = document.getElementById(target);
       if (active) active.classList.add("active");
-    });
+    };
   });
 }
 
@@ -69,7 +80,7 @@ function renderTeams(data) {
 
   Object.values(data).forEach(team => {
     const coManagers =
-      Array.isArray(team.co_managers) && team.co_managers.length > 0
+      Array.isArray(team.co_managers) && team.co_managers.length
         ? team.co_managers.join(", ")
         : "None";
 
@@ -114,40 +125,34 @@ function setupGlow() {
   });
 }
 
-// ================= AUTH UI (ONLY SYSTEM) =================
+// ================= AUTH UI =================
 function setupAuthUI() {
   const loginBtn = document.getElementById("loginBtn");
   const profileBtn = document.getElementById("profileBtn");
 
   const token = localStorage.getItem("hmbl_token");
 
-  // LOGIN
   if (loginBtn) {
     loginBtn.onclick = () => {
       window.location.href = `${API}/auth/discord/login`;
     };
   }
 
-  // small delay fix (IMPORTANT)
-  setTimeout(() => {
-    const tokenNow = localStorage.getItem("hmbl_token");
+  // SINGLE STATE UPDATE (no timeout, no loop risk)
+  if (token) {
+    if (loginBtn) loginBtn.style.display = "none";
+    if (profileBtn) profileBtn.style.display = "inline-block";
 
-    if (tokenNow) {
-      if (loginBtn) loginBtn.style.display = "none";
-      if (profileBtn) profileBtn.style.display = "inline-block";
-
-      if (profileBtn && !profileBtn.dataset.bound) {
-        profileBtn.dataset.bound = "true";
-
-        profileBtn.onclick = () => {
-          window.location.href = "/profile.html";
-        };
-      }
-    } else {
-      if (loginBtn) loginBtn.style.display = "inline-block";
-      if (profileBtn) profileBtn.style.display = "none";
+    if (profileBtn && !profileBtn.dataset.bound) {
+      profileBtn.dataset.bound = "true";
+      profileBtn.onclick = () => {
+        window.location.href = "/profile.html";
+      };
     }
-  }, 50);
+  } else {
+    if (loginBtn) loginBtn.style.display = "inline-block";
+    if (profileBtn) profileBtn.style.display = "none";
+  }
 }
 
 // ================= PROFILE PAGE =================
