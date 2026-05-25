@@ -7,6 +7,17 @@ async function loadProfile() {
 
   const token = localStorage.getItem("hmbl_token");
 
+  const url = new URL(window.location.href);
+  const isNew = url.searchParams.get("new");
+  
+  if (isNew !== "false") {
+    document.getElementById("title").innerText = "Complete Your Profile";
+    document.getElementById("skipBtn").style.display = "inline-block";
+  } else {
+    document.getElementById("title").innerText = "Edit Profile";
+    document.getElementById("skipBtn").style.display = "none";
+  }
+
   if (!token) {
     window.location.href = "/";
     return;
