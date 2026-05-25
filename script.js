@@ -2,11 +2,11 @@ const API = "https://hmblapi.onrender.com";
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
+  handleAuthRedirect();
   load();
   setupTabs();
   setupGlow();
   setupLoginUI();
-  handleAuthRedirect();
 });
 
 function handleAuthRedirect() {
@@ -15,14 +15,9 @@ function handleAuthRedirect() {
 
   if (!token) return;
 
-  // save token
   localStorage.setItem("hmbl_token", token);
 
-  // clean URL (important)
   window.history.replaceState({}, document.title, "/");
-
-  // reload UI state
-  location.reload();
 }
 
 // ================= TAB SYSTEM =================
