@@ -51,11 +51,16 @@ body {
   border-bottom: 1px solid rgba(255,106,0,0.12);
 }
 
+/* LOGO (UPDATED for image support) */
 .logo {
-  color: #ff6a00;
-  font-weight: bold;
-  font-size: 20px;
-  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  height: 32px;
+  width: auto;
 }
 
 /* SEARCH */
@@ -104,6 +109,22 @@ body {
 .links button:hover {
   border-color: rgba(255,106,0,0.35);
   transform: translateY(-1px);
+}
+
+/* LOGIN BUTTON (NEW) */
+.login-btn {
+  border: 1px solid rgba(255,106,0,0.35) !important;
+  color: #ff6a00;
+}
+
+.login-btn:hover {
+  background: rgba(255,106,0,0.08);
+}
+
+/* PROFILE BUTTON (NEW) */
+.profile-btn {
+  border: 1px solid rgba(255,106,0,0.25) !important;
+  color: #ffffff;
 }
 
 /* MAIN */
