@@ -1,6 +1,7 @@
 const API = CONFIG.API_BASE;
 
 let CURRENT_USER = null;
+let CURRENT_PLAYER = null;
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,62 +18,58 @@ async function loadProfile() {
   }
 
   try {
-    // ================= AUTH =================
-    const res = await fetch(`${API}/auth/me`, {
+    // ---------- AUTH ----------
+    const authRes = await fetch(`${API}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
 
-    const json = await res.json();
+    const auth = await authRes.json();
 
-    if (json.status !== "success") {
+    if (auth.status !== "success") {
       localStorage.removeItem("hmbl_token");
       window.location.href = "/";
       return;
     }
 
-    CURRENT_USER = json.user;
+    CURRENT_USER = auth.user;
 
-    // ================= USERNAME =================
+    // ---------- USERNAME ----------
     document.getElementById("username").value =
-      json.user.username || "";
+      auth.user.username || "";
 
-    const pfpEl = document.getElementById("pfp");
-
-    // ================= GET PLAYERS =================
+    // ---------- PLAYERS ----------
     const playersRes = await fetch(`${API}/players`);
     const playersJson = await playersRes.json();
 
-    const playersObj = playersJson.data || {};
-    const playersList = Object.values(playersObj);
+    const players = Object.values(playersJson.data || {});
 
-    const player = playersList.find(
-      p => p.discord_id === json.user.discord_id
+    CURRENT_PLAYER = players.find(
+      p => p.discord_id === auth.user.discord_id
     );
 
-    console.log("PLAYER FOUND:", player);
+    // ---------- PFP (FIXED PRIORITY) ----------
+    const pfpEl = document.getElementById("pfp");
 
-    // ================= PFP (FINAL FIX) =================
-    if (player?.pfp) {
-      pfpEl.src = player.pfp;
+    const pfp =
+      CURRENT_PLAYER?.pfp || null;
 
-    } else if (json.user.discord_id && json.user.avatar) {
-      pfpEl.src =
-        `https://cdn.discordapp.com/avatars/${json.user.discord_id}/${json.user.avatar}.png`;
-
+    if (pfp) {
+      pfpEl.src = pfp;
     } else {
-      pfpEl.src =
-        "https://cdn.discordapp.com/embed/avatars/0.png";
+      pfpEl.src = `https://cdn.discordapp.com/embed/avatars/0.png`;
     }
 
-    // ================= POSITION =================
-    if (player?.position) {
-      document.getElementById("position").value = player.position;
+    // ---------- POSITION ----------
+    if (CURRENT_PLAYER?.position) {
+      document.getElementById("position").value =
+        CURRENT_PLAYER.position;
     }
 
   } catch (err) {
     console.log("Profile load error:", err);
+    window.location.href = "/";
   }
 }
 
@@ -80,8 +77,8 @@ async function loadProfile() {
 async function saveProfile() {
   const token = localStorage.getItem("hmbl_token");
 
-  const username = document.getElementById("username").value;
-  const position = document.getElementById("position").value;
+  const username = document.getElementById("username").value.trim();
+  const position = document.getElementById("position").value.trim();
 
   if (!username) return;
 
@@ -110,6 +107,6 @@ function skipProfile() {
   window.location.href = "/";
 }
 
-// expose to HTML
+// expose
 window.saveProfile = saveProfile;
 window.skipProfile = skipProfile;
