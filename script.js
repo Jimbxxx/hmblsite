@@ -103,7 +103,7 @@ function setupGlow() {
   });
 }
 
-// ================= AUTH UI (NEW) =================
+// ================= AUTH UI =================
 function setupLoginUI() {
   const loginBtn = document.getElementById("loginBtn");
   const profileBtn = document.getElementById("profileBtn");
@@ -114,18 +114,22 @@ function setupLoginUI() {
     });
   }
 
-  // check if user is logged in
   const token = localStorage.getItem("hmbl_token");
 
   if (token) {
     if (loginBtn) loginBtn.style.display = "none";
     if (profileBtn) profileBtn.style.display = "inline-block";
 
-    profileBtn.addEventListener("click", () => {
-      const user = JSON.parse(localStorage.getItem("hmbl_user"));
-      if (user?.username) {
-        window.location.href = `/users/${user.username}`;
-      }
-    });
+    // IMPORTANT FIX: no hmbl_user needed
+    if (profileBtn) {
+      profileBtn.addEventListener("click", () => {
+        goProfile();
+      });
+    }
   }
+}
+
+// ================= PROFILE PAGE =================
+function goProfile() {
+  window.location.href = "/profile.html";
 }
