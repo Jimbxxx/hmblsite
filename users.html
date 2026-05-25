@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HMBL - User Profile</title>
 
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<div class="bg-glow" id="glow"></div>
+
+<header class="nav">
+
+  <div class="logo">
+    <img src="../assets/logo.png" class="logo-img" alt="HMBL">
+  </div>
+
+  <nav class="links">
+    <button onclick="window.location.href='/'">Home</button>
+    <button onclick="window.location.href='/#teams'">Teams</button>
+    <button onclick="window.location.href='/#leaderboard'">Leaderboard</button>
+  </nav>
+
+</header>
+
+<main class="container">
+
+  <!-- PROFILE CARD -->
+  <section class="panel" id="profilePanel">
+
+    <div class="profile-header">
+
+      <img id="profilePfp" class="profile-pfp" src="" alt="PFP">
+
+      <div class="profile-info">
+        <h1 id="profileUsername">Loading...</h1>
+        <p id="profileTeam">Team: -</p>
+        <p id="profilePosition">Position: -</p>
+      </div>
+
+    </div>
+
+    <div class="profile-stats">
+
+      <div class="stat">
+        <div class="stat-number" id="statPoints">0</div>
+        <div class="stat-label">Points</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-number" id="statGoals">0</div>
+        <div class="stat-label">Goals</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-number" id="statAssists">0</div>
+        <div class="stat-label">Assists</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-number" id="statCS">0</div>
+        <div class="stat-label">Clean Sheets</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-number" id="statViews">0</div>
+        <div class="stat-label">Profile Views</div>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<script src="../script.js"></script>
+<script src="../auth.js"></script>
+<script src="../user.js"></script>
+
+</body>
+</html>
