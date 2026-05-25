@@ -1,6 +1,4 @@
-console.log("PROFILE JS IS RUNNING")
-
-const API = CONFIG.API_BASE;
+const API = window.CONFIG.API_BASE;
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
