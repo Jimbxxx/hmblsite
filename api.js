@@ -1,4 +1,4 @@
-const API = CONFIG.API_BASE;
+const API = window.CONFIG.API_BASE;
 
 // GET helpers
 async function getTeams() {
