@@ -47,37 +47,32 @@ async function loadProfile() {
 
     const players = Object.values(playersJson.data || {});
 
-    // safer match
     CURRENT_PLAYER = players.find(
       p => p.discord_id === auth.user.discord_id
     );
 
-    // ================= PFP =================
+    // ================= PFP FIX (IMPORTANT) =================
     const pfpEl = document.getElementById("pfp");
-    
-    function setPfp(url) {
-      if (!pfpEl) return;
-    
-      const cleanUrl = url ? url + "?t=" + Date.now() : null;
-    
+
+    if (pfpEl) {
+      const pfpUrl = CURRENT_PLAYER?.pfp;
+
       pfpEl.onerror = () => {
         pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       };
-    
-      if (cleanUrl) {
-        pfpEl.src = cleanUrl;
+
+      // FORCE CLEAN SET
+      if (pfpUrl) {
+        pfpEl.src = pfpUrl;
       } else {
         pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       }
     }
-    
-    // 🔥 THIS IS WHAT YOU MISSED:
-    setPfp(CURRENT_PLAYER?.pfp);
 
     // ================= POSITION =================
     const posEl = document.getElementById("position");
-    if (posEl && CURRENT_PLAYER?.position) {
-      posEl.value = CURRENT_PLAYER.position;
+    if (posEl) {
+      posEl.value = CURRENT_PLAYER?.position || "";
     }
 
   } catch (err) {
@@ -102,14 +97,10 @@ async function saveProfile() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        username,
-        position
-      })
+      body: JSON.stringify({ username, position })
     });
 
     window.location.href = "/";
-
   } catch (err) {
     console.log("Save error:", err);
   }
