@@ -11,6 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
 async function initAuth() {
   const token = localStorage.getItem("hmbl_token");
 
+  const loginBtn = document.getElementById("loginBtn");
+  const profileBtn = document.getElementById("profileBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
   if (!token) {
     setLoggedOut();
     return;
@@ -19,15 +23,14 @@ async function initAuth() {
   try {
     const res = await fetch(`${API}/auth/me`, {
       headers: {
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     });
 
     const data = await res.json();
 
     if (data.status !== "success") {
-      setLoggedOut();
-      return;
+      throw new Error("Invalid auth");
     }
 
     CURRENT_USER = data.user;
@@ -35,6 +38,8 @@ async function initAuth() {
     setLoggedIn();
   } catch (err) {
     console.log("Auth error:", err);
+    localStorage.removeItem("hmbl_token");
+    CURRENT_USER = null;
     setLoggedOut();
   }
 }
@@ -43,15 +48,32 @@ async function initAuth() {
 function setLoggedIn() {
   const loginBtn = document.getElementById("loginBtn");
   const profileBtn = document.getElementById("profileBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
 
   if (loginBtn) loginBtn.style.display = "none";
   if (profileBtn) profileBtn.style.display = "inline-block";
+  if (logoutBtn) logoutBtn.style.display = "inline-block";
 }
 
 function setLoggedOut() {
   const loginBtn = document.getElementById("loginBtn");
   const profileBtn = document.getElementById("profileBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
 
   if (loginBtn) loginBtn.style.display = "inline-block";
   if (profileBtn) profileBtn.style.display = "none";
+  if (logoutBtn) logoutBtn.style.display = "none";
+}
+
+// ================= GET USER =================
+function getCurrentUser() {
+  return CURRENT_USER;
+}
+
+// ================= LOGOUT =================
+function logout() {
+  localStorage.removeItem("hmbl_token");
+  CURRENT_USER = null;
+  setLoggedOut();
+  window.location.href = "/";
 }
