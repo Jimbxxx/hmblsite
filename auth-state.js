@@ -77,3 +77,37 @@ function logout() {
   setLoggedOut();
   window.location.href = "/";
 }
+
+
+// ================= AUTO ROUTE =================
+(async function handlePostLoginRedirect() {
+  try {
+    const token = localStorage.getItem("hmbl_token");
+
+    const res = await fetch(`${API}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.status !== "success") return;
+
+    const setupRes = await fetch(`${API}/auth/needs-setup`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const setupJson = await setupRes.json();
+
+    // NEW USER → setup page
+    if (setupJson.status === "success" && setupJson.needs_setup) {
+      window.location.href = "/profile.html";
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+})();
