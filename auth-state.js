@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAuth();
 });
 
-// ================= MAIN AUTH CHECK =================
+// ================= AUTH CHECK =================
 async function initAuth() {
   const token = localStorage.getItem("hmbl_token");
 
@@ -36,6 +36,7 @@ async function initAuth() {
     CURRENT_USER = data.user;
 
     setLoggedIn();
+
   } catch (err) {
     console.log("Auth error:", err);
     localStorage.removeItem("hmbl_token");
@@ -53,6 +54,24 @@ function setLoggedIn() {
   if (loginBtn) loginBtn.style.display = "none";
   if (profileBtn) profileBtn.style.display = "inline-block";
   if (logoutBtn) logoutBtn.style.display = "inline-block";
+
+  // prevent duplicate listeners
+  if (profileBtn && !profileBtn.dataset.bound) {
+    profileBtn.dataset.bound = "true";
+
+    profileBtn.onclick = () => {
+      const user = CURRENT_USER;
+      if (user?.username) {
+        window.location.href = `/users.html?u=${user.username}`;
+      }
+    };
+  }
+
+  if (logoutBtn && !logoutBtn.dataset.bound) {
+    logoutBtn.dataset.bound = "true";
+
+    logoutBtn.onclick = logout;
+  }
 }
 
 function setLoggedOut() {
@@ -77,37 +96,3 @@ function logout() {
   setLoggedOut();
   window.location.href = "/";
 }
-
-
-// ================= AUTO ROUTE =================
-(async function handlePostLoginRedirect() {
-  try {
-    const token = localStorage.getItem("hmbl_token");
-
-    const res = await fetch(`${API}/auth/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const data = await res.json();
-
-    if (data.status !== "success") return;
-
-    const setupRes = await fetch(`${API}/auth/needs-setup`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const setupJson = await setupRes.json();
-
-    // NEW USER → setup page
-    if (setupJson.status === "success" && setupJson.needs_setup) {
-      window.location.href = "/profile.html";
-    }
-
-  } catch (err) {
-    console.log(err);
-  }
-})();
