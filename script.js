@@ -6,9 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
   load();
   setupTabs();
   setupGlow();
-  setupLoginUI();
+  setupAuthUI();
 });
 
+// ================= TOKEN HANDLER =================
 function handleAuthRedirect() {
   const url = new URL(window.location.href);
   const token = url.searchParams.get("token");
@@ -16,7 +17,6 @@ function handleAuthRedirect() {
   if (!token) return;
 
   localStorage.setItem("hmbl_token", token);
-
   window.history.replaceState({}, document.title, "/");
 }
 
@@ -48,11 +48,8 @@ async function load() {
     const teamsJson = await teamsRes.json();
     const divJson = await divRes.json();
 
-    const teams = teamsJson.data || {};
-    const divisions = divJson.data || {};
-
-    renderTeams(teams);
-    renderDivisions(divisions);
+    renderTeams(teamsJson.data || {});
+    renderDivisions(divJson.data || {});
 
   } catch (err) {
     console.log("API ERROR:", err);
@@ -66,8 +63,7 @@ function renderTeams(data) {
 
   el.innerHTML = "";
 
-  Object.values(data || {}).forEach(team => {
-
+  Object.values(data).forEach(team => {
     const coManagers =
       Array.isArray(team.co_managers) && team.co_managers.length > 0
         ? team.co_managers.join(", ")
@@ -76,7 +72,6 @@ function renderTeams(data) {
     el.innerHTML += `
       <div class="team-card">
         <div class="team-name">${team.name || "Unnamed Team"}</div>
-
         <div class="team-meta">
           Division: ${team.division || "Unknown"}<br>
           Manager: ${team.manager || "None"}<br>
@@ -95,7 +90,7 @@ function renderDivisions(data) {
 
   el.innerHTML = "";
 
-  Object.values(data || {}).forEach(div => {
+  Object.values(data).forEach(div => {
     el.innerHTML += `
       <div class="division-pill">
         ${div.name || "Unnamed Division"}
@@ -115,29 +110,35 @@ function setupGlow() {
   });
 }
 
-// ================= AUTH UI =================
-function setupLoginUI() {
+// ================= AUTH UI (ONLY SYSTEM) =================
+function setupAuthUI() {
   const loginBtn = document.getElementById("loginBtn");
   const profileBtn = document.getElementById("profileBtn");
 
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
-      window.location.href = `${API}/auth/discord/login`;
-    });
-  }
-
   const token = localStorage.getItem("hmbl_token");
 
+  // LOGIN
+  if (loginBtn) {
+    loginBtn.onclick = () => {
+      window.location.href = `${API}/auth/discord/login`;
+    };
+  }
+
+  // AUTH STATE UI
   if (token) {
     if (loginBtn) loginBtn.style.display = "none";
     if (profileBtn) profileBtn.style.display = "inline-block";
 
-    // IMPORTANT FIX: no hmbl_user needed
-    if (profileBtn) {
-      profileBtn.addEventListener("click", () => {
-        goProfile();
-      });
+    if (profileBtn && !profileBtn.dataset.bound) {
+      profileBtn.dataset.bound = "true";
+
+      profileBtn.onclick = () => {
+        window.location.href = "/profile.html";
+      };
     }
+  } else {
+    if (loginBtn) loginBtn.style.display = "inline-block";
+    if (profileBtn) profileBtn.style.display = "none";
   }
 }
 
