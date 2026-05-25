@@ -14,7 +14,9 @@
 
 <header class="nav">
 
-  <div class="logo">HMBL</div>
+  <div class="logo">
+    <img src="assets/logo.png" alt="HMBL" class="logo-img">
+  </div>
 
   <input
     class="search"
@@ -23,11 +25,21 @@
   >
 
   <nav class="links">
+
     <button data-tab="home">Home</button>
     <button data-tab="leaderboard">Leaderboard</button>
     <button data-tab="teams">Teams</button>
     <button data-tab="games">Games</button>
     <button data-tab="tables">Tables</button>
+
+    <!-- AUTH BUTTON (NEW) -->
+    <button id="loginBtn" class="login-btn">Login</button>
+
+    <!-- PROFILE BUTTON (hidden until login) -->
+    <button id="profileBtn" class="profile-btn" style="display:none;">
+      Profile
+    </button>
+
   </nav>
 
 </header>
@@ -101,5 +113,7 @@
 </main>
 
 <script src="script.js"></script>
+<script src="auth.js"></script>
+
 </body>
 </html>
