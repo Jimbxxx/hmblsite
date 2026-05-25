@@ -3,35 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HMBL | Profile</title>
+  <title>HMBL | Profile Setup</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- glow -->
   <div class="bg-glow" id="glow"></div>
 
   <!-- NAV -->
   <header class="nav">
 
     <div class="logo">
-      <img src="assets/logo.png" class="logo-img" alt="HMBL">
+      <img src="assets/logo.png" class="logo-img">
     </div>
 
     <nav class="links">
-
       <button onclick="window.location.href='/'">Home</button>
-
-      <button onclick="window.location.href='/profile.html'">
-        Profile
-      </button>
-
-      <button id="logoutBtn" onclick="logout()" style="display:none">
-        Logout
-      </button>
-
+      <button onclick="window.location.href='/profile.html'">Profile</button>
     </nav>
 
   </header>
@@ -39,43 +29,43 @@
   <!-- MAIN -->
   <main class="container">
 
-    <div class="panel hero">
+    <div class="panel">
 
-      <div class="hero-top">PROFILE SYSTEM</div>
+      <div class="hero-top">PROFILE SETUP</div>
 
       <h1 id="title">Complete Your Profile</h1>
 
-      <p>Update your player identity for HMBL.</p>
+      <p style="opacity:0.7;margin-top:-10px">
+        Set your identity for the HMBL system
+      </p>
 
-      <!-- PROFILE CARD -->
+      <!-- CARD -->
       <div class="profile-card">
 
-        <img id="pfp" class="profile-pfp" alt="pfp">
+        <img id="pfp" class="profile-pfp" alt="Discord PFP">
 
         <div class="profile-form">
 
-          <div class="field">
-            <span class="label">Username</span>
-            <input id="username" type="text" placeholder="Enter username">
-          </div>
+          <label>Username</label>
+          <input id="username" type="text" placeholder="Your username">
 
-          <div class="field">
-            <span class="label">Position</span>
-            <input id="position" type="text" placeholder="ST, CM, GK">
-          </div>
+          <label>Position</label>
+          <input id="position" type="text" placeholder="ST, CM, GK">
 
         </div>
 
       </div>
 
-      <!-- STATUS -->
-      <div class="profile-status" id="status"></div>
-
       <!-- BUTTONS -->
       <div class="profile-buttons">
 
-        <button onclick="saveProfile()">Save</button>
-        <button id="skipBtn" onclick="skipProfile()">Skip</button>
+        <button onclick="saveProfile()">
+          Save Profile
+        </button>
+
+        <button onclick="skipProfile()" id="skipBtn">
+          Skip
+        </button>
 
       </div>
 
@@ -83,7 +73,6 @@
 
   </main>
 
-  <!-- SCRIPTS -->
   <script src="config.js"></script>
   <script src="auth-state.js"></script>
   <script src="profile.js"></script>
