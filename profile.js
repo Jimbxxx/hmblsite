@@ -1,3 +1,5 @@
+console.log("PROFILE JS IS RUNNING")
+
 const API = CONFIG.API_BASE;
 
 // ================= INIT =================
