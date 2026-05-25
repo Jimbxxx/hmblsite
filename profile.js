@@ -18,7 +18,7 @@ async function loadProfile() {
   }
 
   try {
-    // ---------- AUTH ----------
+    // ================= AUTH =================
     const authRes = await fetch(`${API}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -35,36 +35,51 @@ async function loadProfile() {
 
     CURRENT_USER = auth.user;
 
-    // ---------- USERNAME ----------
-    document.getElementById("username").value =
-      auth.user.username || "";
+    // ================= USERNAME =================
+    const usernameEl = document.getElementById("username");
+    if (usernameEl) {
+      usernameEl.value = auth.user.username || "";
+    }
 
-    // ---------- PLAYERS ----------
+    // ================= PLAYERS =================
     const playersRes = await fetch(`${API}/players`);
     const playersJson = await playersRes.json();
 
     const players = Object.values(playersJson.data || {});
 
+    // safer match
     CURRENT_PLAYER = players.find(
       p => p.discord_id === auth.user.discord_id
     );
 
-    // ---------- PFP (FIXED PRIORITY) ----------
+    // ================= PFP (SAFE FIX) =================
     const pfpEl = document.getElementById("pfp");
 
-    const pfp =
-      CURRENT_PLAYER?.pfp || null;
+    function setPfp(url) {
+      if (!pfpEl) return;
 
-    if (pfp) {
-      pfpEl.src = pfp;
-    } else {
-      pfpEl.src = `https://cdn.discordapp.com/embed/avatars/0.png`;
+      pfpEl.onerror = () => {
+        pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+      };
+
+      if (url && typeof url === "string" && url.length > 10) {
+        pfpEl.src = url;
+      } else {
+        pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+      }
     }
 
-    // ---------- POSITION ----------
-    if (CURRENT_PLAYER?.position) {
-      document.getElementById("position").value =
-        CURRENT_PLAYER.position;
+    // PRIORITY ORDER
+    setPfp(
+      CURRENT_PLAYER?.pfp ||
+      auth.user.avatar_url ||
+      null
+    );
+
+    // ================= POSITION =================
+    const posEl = document.getElementById("position");
+    if (posEl && CURRENT_PLAYER?.position) {
+      posEl.value = CURRENT_PLAYER.position;
     }
 
   } catch (err) {
@@ -77,8 +92,8 @@ async function loadProfile() {
 async function saveProfile() {
   const token = localStorage.getItem("hmbl_token");
 
-  const username = document.getElementById("username").value.trim();
-  const position = document.getElementById("position").value.trim();
+  const username = document.getElementById("username")?.value?.trim();
+  const position = document.getElementById("position")?.value?.trim();
 
   if (!username) return;
 
