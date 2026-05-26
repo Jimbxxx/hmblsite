@@ -2,14 +2,12 @@ const API = "https://hmblapi.onrender.com";
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
-  // HARD GUARD: prevent double execution
   if (window.__HMBL_INIT__) return;
   window.__HMBL_INIT__ = true;
 
   handleAuthRedirect();
   setupAuthUI();
 
-  // DO NOT run homepage logic on profile page
   if (window.location.pathname.includes("profile.html")) return;
 
   load();
@@ -24,12 +22,9 @@ function handleAuthRedirect() {
 
   if (!token) return;
 
-  // prevent repeated writes
   if (localStorage.getItem("hmbl_token") === token) return;
 
   localStorage.setItem("hmbl_token", token);
-
-  // clean URL without reload
   window.history.replaceState({}, document.title, "/");
 }
 
@@ -138,24 +133,45 @@ function setupAuthUI() {
     };
   }
 
-  // SINGLE STATE UPDATE (no timeout, no loop risk)
+  if (!profileBtn) return;
+
   if (token) {
-    if (loginBtn) loginBtn.style.display = "none";
-    if (profileBtn) profileBtn.style.display = "inline-block";
+    loginBtn && (loginBtn.style.display = "none");
+    profileBtn.style.display = "inline-block";
 
-    if (profileBtn && !profileBtn.dataset.bound) {
-      profileBtn.dataset.bound = "true";
-      profileBtn.onclick = () => {
-        const user = JSON.parse(localStorage.getItem("hmbl_user"));
+    profileBtn.onclick = async () => {
+      const token = localStorage.getItem("hmbl_token");
 
-        if (!user) return;
-        
-        window.location.href = `/${user.username}`;
-      };
-    }
+      if (!token) {
+        window.location.href = "/";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const data = await res.json();
+
+        if (data.status !== "success") {
+          window.location.href = "/";
+          return;
+        }
+
+        window.location.href = `/${data.user.username}`;
+
+      } catch (err) {
+        console.log("Profile redirect error:", err);
+        window.location.href = "/";
+      }
+    };
+
   } else {
-    if (loginBtn) loginBtn.style.display = "inline-block";
-    if (profileBtn) profileBtn.style.display = "none";
+    loginBtn && (loginBtn.style.display = "inline-block");
+    profileBtn.style.display = "none";
   }
 }
 
