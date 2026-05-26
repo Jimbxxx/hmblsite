@@ -1,24 +1,18 @@
-const API = window.CONFIG.API_BASE;
-
-// ================= GLOBAL STATE =================
 let CURRENT_USER = null;
 
 // ================= LOGIN =================
 function login() {
-  window.location.href = `${API}/auth/discord/login`;
+  window.location.href = `${window.CONFIG.API_BASE}/auth/discord/login`;
 }
 
 // ================= HANDLE CALLBACK =================
-// runs on every page load
 (function handleAuthCallback() {
   const url = new URL(window.location.href);
   const token = url.searchParams.get("token");
 
   if (token) {
     localStorage.setItem("hmbl_token", token);
-  
     window.history.replaceState({}, document.title, window.location.pathname);
-  
     window.location.href = "/profile.html";
   }
 })();
@@ -30,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ================= CHECK AUTH =================
 async function initAuthState() {
+
   const token = localStorage.getItem("hmbl_token");
 
   if (!token) {
@@ -38,9 +33,10 @@ async function initAuthState() {
   }
 
   try {
-    const res = await fetch(`${API}/auth/me`, {
+
+    const res = await fetch(`${window.CONFIG.API_BASE}/auth/me`, {
       headers: {
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -80,26 +76,21 @@ function setLoggedOut() {
   if (profileBtn) profileBtn.style.display = "none";
 }
 
-// ================= GET CURRENT USER =================
+// ================= HELPERS =================
 function getCurrentUser() {
-  return CURRENT_USER || null;
+  return CURRENT_USER;
 }
 
-// ================= PROFILE NAV =================
 function goProfile() {
   const user = getCurrentUser();
-
   if (!user) return;
 
-  window.location.href = `/users/${user.username}`;
+  window.location.href = `/${user.username}`;
 }
 
-// ================= LOGOUT =================
 function logout() {
   localStorage.removeItem("hmbl_token");
   localStorage.removeItem("hmbl_user");
-
   CURRENT_USER = null;
-
   location.reload();
 }
