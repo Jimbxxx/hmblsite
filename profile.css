@@ -107,3 +107,187 @@
     height: 90px;
   }
 }
+
+/* ================= PROFILE PAGE ================= */
+
+.profile-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* MAIN CARD */
+.profile-main-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 20px;
+
+  background: rgba(10,10,10,0.95);
+  border: 1px solid rgba(255,106,0,0.15);
+
+  border-radius: 18px;
+
+  box-shadow: 0 0 30px rgba(255,106,0,0.05);
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
+  border: 2px solid rgba(255,106,0,0.35);
+
+  box-shadow: 0 0 25px rgba(255,106,0,0.15);
+}
+
+.profile-info h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.profile-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.badge {
+  padding: 4px 10px;
+
+  font-size: 12px;
+
+  background: #0d0d0d;
+
+  border: 1px solid rgba(255,106,0,0.2);
+
+  border-radius: 999px;
+
+  opacity: 0.8;
+}
+
+/* CARDS */
+.profile-card {
+  padding: 16px;
+
+  background: rgba(10,10,10,0.92);
+
+  border: 1px solid rgba(255,106,0,0.10);
+
+  border-radius: 14px;
+}
+
+/* SOCIALS */
+#socialsView div {
+  padding: 6px 0;
+  opacity: 0.75;
+}
+
+/* MUSIC */
+#musicView a {
+  color: #ff6a00;
+  text-decoration: none;
+}
+
+/* STATS (GUNS.LOL STYLE GRID) */
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.profile-stats div {
+  background: #0d0d0d;
+
+  border: 1px solid rgba(255,106,0,0.1);
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  text-align: center;
+}
+
+/* EDIT BUTTON */
+.edit-btn {
+  padding: 10px;
+
+  background: #0d0d0d;
+
+  border: 1px solid rgba(255,106,0,0.25);
+
+  color: white;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.edit-btn:hover {
+  border-color: rgba(255,106,0,0.5);
+  transform: translateY(-2px);
+}
+
+/* EDIT PANEL */
+.edit-panel {
+  padding: 16px;
+
+  background: rgba(10,10,10,0.95);
+
+  border: 1px solid rgba(255,106,0,0.12);
+
+  border-radius: 16px;
+}
+
+.edit-panel .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.edit-panel .full {
+  grid-column: span 2;
+}
+
+.edit-panel input,
+.edit-panel select {
+  width: 100%;
+
+  padding: 10px;
+
+  background: #050505;
+
+  border: 1px solid rgba(255,106,0,0.15);
+
+  color: white;
+
+  border-radius: 10px;
+}
+
+/* SAVE */
+.save-btn {
+  margin-top: 12px;
+
+  width: 100%;
+
+  padding: 12px;
+
+  background: #0d0d0d;
+
+  border: 1px solid rgba(255,106,0,0.25);
+
+  color: #ff6a00;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  box-shadow: 0 0 20px rgba(255,106,0,0.15);
+}
