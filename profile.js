@@ -1,107 +1,118 @@
-console.log("PROFILE JS LOADED");
+console.log("PROFILE LOADED");
 
-// ================= CONFIG =================
-const API = window.CONFIG?.API_BASE;
+const API = window.CONFIG.API_BASE;
 
-if (!API) {
-  console.error("CONFIG NOT LOADED");
-}
+let CURRENT = null;
+let EDIT = false;
 
-// ================= INIT =================
-document.addEventListener("DOMContentLoaded", () => {
-  loadProfile();
-});
+document.addEventListener("DOMContentLoaded", load);
 
-// ================= LOAD =================
-async function loadProfile() {
+async function load() {
 
   const token = localStorage.getItem("hmbl_token");
+  if (!token) return location.href = "/";
 
-  if (!token) {
-    window.location.href = "/";
-    return;
-  }
+  const res = await fetch(`${API}/auth/me`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
 
-  try {
+  const data = await res.json();
+  if (data.status !== "success") return;
 
-    const authRes = await fetch(`${API}/auth/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+  const user = data.user;
 
-    const auth = await authRes.json();
+  const playersRes = await fetch(`${API}/players`);
+  const players = Object.values((await playersRes.json()).data);
 
-    console.log("AUTH:", auth);
+  const player = players.find(p => p.discord_id === user.discord_id);
 
-    if (auth.status !== "success") {
-      localStorage.removeItem("hmbl_token");
-      window.location.href = "/";
-      return;
-    }
+  CURRENT = player;
 
-    const user = auth.user;
-
-    console.log("USER:", user);
-
-    // ================= FILL INPUTS =================
-    document.getElementById("username").value = user.username || "";
-    document.getElementById("position").value = user.position || "";
-
-    // ================= PFP =================
-    const pfp = document.getElementById("pfp");
-
-    if (pfp) {
-      const url =
-        user.pfp ||
-        "https://cdn.discordapp.com/embed/avatars/0.png";
-
-      pfp.src = url;
-
-      pfp.onerror = () => {
-        pfp.src = "https://cdn.discordapp.com/embed/avatars/0.png";
-      };
-    }
-
-  } catch (err) {
-    console.log("PROFILE ERROR:", err);
-  }
+  render(player);
 }
 
-// ================= SAVE =================
+function render(p) {
+
+  // PFP
+  document.getElementById("pfp").src =
+    p.pfp || "https://cdn.discordapp.com/embed/avatars/0.png";
+
+  // HEADER
+  document.getElementById("displayName").textContent = p.username;
+  document.getElementById("displayPosition").textContent = p.position || "No position";
+  document.getElementById("displayCountry").textContent = p.country || "";
+
+  // INPUTS
+  username.value = p.username || "";
+  position.value = p.position || "";
+  country.value = p.country || "";
+
+  discord.value = p.socials?.discord || "";
+  twitter.value = p.socials?.twitter || "";
+  instagram.value = p.socials?.instagram || "";
+  tiktok.value = p.socials?.tiktok || "";
+  music.value = p.music || "";
+
+  // STATS
+  stats.innerHTML = `
+    <div class="stat-box"><h2>${p.goals}</h2><p>Goals</p></div>
+    <div class="stat-box"><h2>${p.assists}</h2><p>Assists</p></div>
+    <div class="stat-box"><h2>${p.points}</h2><p>Points</p></div>
+    <div class="stat-box"><h2>${p.clean_sheets}</h2><p>CS</p></div>
+  `;
+
+  // SOCIALS VIEW
+  socialsView.innerHTML = `
+    ${p.socials?.discord ? `<div>Discord: ${p.socials.discord}</div>` : ""}
+    ${p.socials?.twitter ? `<div>Twitter: ${p.socials.twitter}</div>` : ""}
+    ${p.socials?.instagram ? `<div>Instagram: ${p.socials.instagram}</div>` : ""}
+    ${p.socials?.tiktok ? `<div>TikTok: ${p.socials.tiktok}</div>` : ""}
+  `;
+
+  // MUSIC
+  musicView.innerHTML = p.music
+    ? `<iframe width="100%" height="120" src="${p.music}" frameborder="0"></iframe>`
+    : "";
+}
+
+function toggleEdit() {
+  EDIT = !EDIT;
+
+  editPanel.style.display = EDIT ? "block" : "none";
+}
+
 async function saveProfile() {
 
   const token = localStorage.getItem("hmbl_token");
 
-  const username = document.getElementById("username")?.value?.trim();
-  const position = document.getElementById("position")?.value?.trim();
+  const payload = {
+    username: username.value,
+    position: position.value,
+    country: country.value,
+    socials: {
+      discord: discord.value,
+      twitter: twitter.value,
+      instagram: instagram.value,
+      tiktok: tiktok.value
+    },
+    music: music.value
+  };
 
-  if (!username) return;
+  const res = await fetch(`${API}/players/update-profile`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
+  });
 
-  try {
+  const json = await res.json();
 
-    const res = await fetch(`${API}/players/update-profile`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ username, position })
-    });
-
-    const json = await res.json();
-
-    console.log("SAVE:", json);
-
-    if (json.status === "success") {
-      window.location.href = "/";
-    }
-
-  } catch (err) {
-    console.log("SAVE ERROR:", err);
+  if (json.status === "success") {
+    location.reload();
   }
 }
 
-// ================= EXPOSE =================
 window.saveProfile = saveProfile;
-window.skipProfile = () => window.location.href = "/";
+window.toggleEdit = toggleEdit;
