@@ -1,5 +1,37 @@
 let CURRENT_USER = null;
 
+document.addEventListener("DOMContentLoaded", initAuth);
+
+async function initAuth() {
+  const token = localStorage.getItem("hmbl_token");
+
+  if (!token) {
+    setLoggedOut();
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.status !== "success") {
+      setLoggedOut();
+      return;
+    }
+
+    CURRENT_USER = data.user;
+    setLoggedIn();
+
+  } catch (err) {
+    setLoggedOut();
+  }
+}
+
 // ================= LOGIN =================
 function login() {
   window.location.href = `${window.CONFIG.API_BASE}/auth/discord/login`;
