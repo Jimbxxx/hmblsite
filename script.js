@@ -146,7 +146,11 @@ function setupAuthUI() {
     if (profileBtn && !profileBtn.dataset.bound) {
       profileBtn.dataset.bound = "true";
       profileBtn.onclick = () => {
-        window.location.href = "/profile.html";
+        const user = JSON.parse(localStorage.getItem("hmbl_user"));
+
+        if (!user) return;
+        
+        window.location.href = `/${user.username}`;
       };
     }
   } else {
