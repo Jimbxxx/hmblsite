@@ -1,118 +1,172 @@
-console.log("PROFILE LOADED");
+console.log("PROFILE JS LOADED");
 
-const API = window.CONFIG.API_BASE;
+const API = window.CONFIG?.API_BASE;
 
-let CURRENT = null;
-let EDIT = false;
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+  loadProfile();
+});
 
-document.addEventListener("DOMContentLoaded", load);
-
-async function load() {
+// ================= LOAD =================
+async function loadProfile() {
 
   const token = localStorage.getItem("hmbl_token");
-  if (!token) return location.href = "/";
+  if (!token) return window.location.href = "/";
 
-  const res = await fetch(`${API}/auth/me`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  try {
 
-  const data = await res.json();
-  if (data.status !== "success") return;
+    const res = await fetch(`${API}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-  const user = data.user;
+    const auth = await res.json();
 
-  const playersRes = await fetch(`${API}/players`);
-  const players = Object.values((await playersRes.json()).data);
+    if (auth.status !== "success") {
+      localStorage.removeItem("hmbl_token");
+      return window.location.href = "/";
+    }
 
-  const player = players.find(p => p.discord_id === user.discord_id);
+    const user = auth.user;
 
-  CURRENT = player;
+    // ================= INPUTS =================
+    setVal("username", user.username);
+    setVal("position", user.position);
+    setVal("country", user.country);
 
-  render(player);
+    const socials = user.socials || {};
+
+    setVal("discord", socials.discord);
+    setVal("twitter", socials.twitter);
+    setVal("instagram", socials.instagram);
+    setVal("tiktok", socials.tiktok);
+
+    setVal("music", user.music);
+
+    // ================= PFP =================
+    const pfp = document.getElementById("pfp");
+
+    if (pfp) {
+      pfp.src = user.pfp || "https://cdn.discordapp.com/embed/avatars/0.png";
+    }
+
+    // ================= DISPLAY MODE =================
+    renderDisplay(user);
+
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-function render(p) {
-
-  // PFP
-  document.getElementById("pfp").src =
-    p.pfp || "https://cdn.discordapp.com/embed/avatars/0.png";
-
-  // HEADER
-  document.getElementById("displayName").textContent = p.username;
-  document.getElementById("displayPosition").textContent = p.position || "No position";
-  document.getElementById("displayCountry").textContent = p.country || "";
-
-  // INPUTS
-  username.value = p.username || "";
-  position.value = p.position || "";
-  country.value = p.country || "";
-
-  discord.value = p.socials?.discord || "";
-  twitter.value = p.socials?.twitter || "";
-  instagram.value = p.socials?.instagram || "";
-  tiktok.value = p.socials?.tiktok || "";
-  music.value = p.music || "";
-
-  // STATS
-  stats.innerHTML = `
-    <div class="stat-box"><h2>${p.goals}</h2><p>Goals</p></div>
-    <div class="stat-box"><h2>${p.assists}</h2><p>Assists</p></div>
-    <div class="stat-box"><h2>${p.points}</h2><p>Points</p></div>
-    <div class="stat-box"><h2>${p.clean_sheets}</h2><p>CS</p></div>
-  `;
-
-  // SOCIALS VIEW
-  socialsView.innerHTML = `
-    ${p.socials?.discord ? `<div>Discord: ${p.socials.discord}</div>` : ""}
-    ${p.socials?.twitter ? `<div>Twitter: ${p.socials.twitter}</div>` : ""}
-    ${p.socials?.instagram ? `<div>Instagram: ${p.socials.instagram}</div>` : ""}
-    ${p.socials?.tiktok ? `<div>TikTok: ${p.socials.tiktok}</div>` : ""}
-  `;
-
-  // MUSIC
-  musicView.innerHTML = p.music
-    ? `<iframe width="100%" height="120" src="${p.music}" frameborder="0"></iframe>`
-    : "";
+// ================= HELPERS =================
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val || "";
 }
 
-function toggleEdit() {
-  EDIT = !EDIT;
+// ================= RENDER PROFILE =================
+function renderDisplay(user) {
 
-  editPanel.style.display = EDIT ? "block" : "none";
+  const displayName = document.getElementById("displayName");
+  const displayPos = document.getElementById("displayPosition");
+  const displayCountry = document.getElementById("displayCountry");
+  const socialsView = document.getElementById("socialsView");
+  const musicView = document.getElementById("musicView");
+  const stats = document.getElementById("stats");
+
+  if (displayName) displayName.textContent = user.username;
+  if (displayPos) displayPos.textContent = user.position || "No position";
+  if (displayCountry) displayCountry.textContent = user.country || "Unknown";
+
+  // socials
+  if (socialsView) {
+    const s = user.socials || {};
+    socialsView.innerHTML = `
+      <div>Discord: ${s.discord || "-"}</div>
+      <div>Twitter: ${s.twitter || "-"}</div>
+      <div>Instagram: ${s.instagram || "-"}</div>
+      <div>TikTok: ${s.tiktok || "-"}</div>
+    `;
+  }
+
+  // music
+  if (musicView) {
+    musicView.innerHTML = user.music
+      ? `<a href="${user.music}" target="_blank">🎵 Music Link</a>`
+      : "";
+  }
+
+  // stats
+  if (stats) {
+    stats.innerHTML = `
+      <div>Goals: ${user.goals || 0}</div>
+      <div>Assists: ${user.assists || 0}</div>
+      <div>Points: ${user.points || 0}</div>
+      <div>Clean Sheets: ${user.clean_sheets || 0}</div>
+    `;
+  }
 }
 
+// ================= SAVE =================
 async function saveProfile() {
 
   const token = localStorage.getItem("hmbl_token");
 
   const payload = {
-    username: username.value,
-    position: position.value,
-    country: country.value,
+    username: getVal("username"),
+    position: getVal("position"),
+    country: getVal("country"),
+
     socials: {
-      discord: discord.value,
-      twitter: twitter.value,
-      instagram: instagram.value,
-      tiktok: tiktok.value
+      discord: getVal("discord"),
+      twitter: getVal("twitter"),
+      instagram: getVal("instagram"),
+      tiktok: getVal("tiktok")
     },
-    music: music.value
+
+    music: getVal("music")
   };
 
-  const res = await fetch(`${API}/players/update-profile`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(payload)
-  });
-
-  const json = await res.json();
-
-  if (json.status === "success") {
-    location.reload();
+  // enforce position
+  if (!payload.position) {
+    alert("Pick a position");
+    return;
   }
+
+  try {
+
+    const res = await fetch(`${API}/players/update-profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const json = await res.json();
+
+    if (json.status === "success") {
+      window.location.href = "/";
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// ================= HELPERS =================
+function getVal(id) {
+  return document.getElementById(id)?.value?.trim() || "";
+}
+
+function toggleEdit() {
+  const edit = document.getElementById("editPanel");
+  if (!edit) return;
+
+  edit.style.display =
+    edit.style.display === "none" ? "block" : "none";
 }
 
 window.saveProfile = saveProfile;
 window.toggleEdit = toggleEdit;
+window.skipProfile = () => (window.location.href = "/");
