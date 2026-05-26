@@ -1,6 +1,11 @@
 console.log("PROFILE JS LOADED");
 
-const API = window.CONFIG.API_BASE;
+// ================= CONFIG =================
+const API = window.CONFIG?.API_BASE;
+
+if (!API) {
+  console.error("CONFIG NOT LOADED");
+}
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,7 +24,6 @@ async function loadProfile() {
 
   try {
 
-    // ================= AUTH =================
     const authRes = await fetch(`${API}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -38,37 +42,24 @@ async function loadProfile() {
 
     const user = auth.user;
 
-    // ================= INPUTS =================
-    const usernameEl = document.getElementById("username");
-    if (usernameEl) usernameEl.value = user.username || "";
+    console.log("USER:", user);
 
-    const positionEl = document.getElementById("position");
-    if (positionEl) positionEl.value = user.position || "";
-
-    // ================= PLAYERS =================
-    const playersRes = await fetch(`${API}/players`);
-    const playersJson = await playersRes.json();
-
-    const players = Object.values(playersJson.data || {});
-
-    const player = players.find(
-      p => p.discord_id === user.discord_id
-    );
-
-    console.log("PLAYER:", player);
+    // ================= FILL INPUTS =================
+    document.getElementById("username").value = user.username || "";
+    document.getElementById("position").value = user.position || "";
 
     // ================= PFP =================
-    const pfpEl = document.getElementById("pfp");
+    const pfp = document.getElementById("pfp");
 
-    if (pfpEl) {
+    if (pfp) {
       const url =
-        player?.pfp ||
+        user.pfp ||
         "https://cdn.discordapp.com/embed/avatars/0.png";
 
-      pfpEl.src = url;
+      pfp.src = url;
 
-      pfpEl.onerror = () => {
-        pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+      pfp.onerror = () => {
+        pfp.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       };
     }
 
@@ -95,10 +86,7 @@ async function saveProfile() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        username,
-        position
-      })
+      body: JSON.stringify({ username, position })
     });
 
     const json = await res.json();
@@ -114,11 +102,6 @@ async function saveProfile() {
   }
 }
 
-// ================= SKIP =================
-function skipProfile() {
-  window.location.href = "/";
-}
-
-// expose
+// ================= EXPOSE =================
 window.saveProfile = saveProfile;
-window.skipProfile = skipProfile;
+window.skipProfile = () => window.location.href = "/";
