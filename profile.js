@@ -146,7 +146,8 @@ async function saveProfile() {
     const json = await res.json();
 
     if (json.status === "success") {
-      window.location.href = "/";
+      await loadProfile();
+      toggleEdit();
     }
 
   } catch (err) {
