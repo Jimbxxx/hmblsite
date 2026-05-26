@@ -53,7 +53,9 @@ function getUsernameFromURL() {
 
   const path = window.location.pathname;
 
-  return path.replace("/", "").trim();
+  const parts = path.split("/").filter(Boolean);
+
+  return parts[parts.length - 1];
 
 }
 
