@@ -1,173 +1,110 @@
 <main class="container">
 
-  <div class="panel">
+  <div class="profile-wrap">
 
     <!-- TOP BAR -->
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <div class="hero-top">USER PROFILE</div>
 
-      <button onclick="toggleEdit()" id="editBtn">
+      <button onclick="toggleEdit()" class="edit-btn">
         Edit Profile
       </button>
     </div>
 
-    <!-- PROFILE CARD -->
-    <div class="profile-wrap">
-    
-      <!-- TOP PROFILE CARD -->
-      <div class="profile-main-card">
-    
-        <img id="pfp" class="profile-avatar">
-    
-        <div class="profile-info">
-    
-          <h1 id="displayName"></h1>
-    
-          <div class="profile-badges">
-            <span id="displayPosition" class="badge"></span>
-            <span id="displayCountry" class="badge"></span>
-          </div>
-    
+    <!-- MAIN CARD -->
+    <div class="profile-main-card">
+
+      <img id="pfp" class="profile-avatar">
+
+      <div class="profile-info">
+
+        <h1 id="displayName"></h1>
+
+        <div class="profile-badges">
+          <span id="displayPosition" class="badge"></span>
+          <span id="displayCountry" class="badge"></span>
         </div>
-    
+
       </div>
-    
-      <!-- SOCIALS -->
-      <div class="profile-card">
-        <h3>Socials</h3>
-        <div id="socialsView"></div>
-      </div>
-    
-      <!-- MUSIC -->
-      <div class="profile-card">
-        <h3>Music</h3>
-        <div id="musicView"></div>
-      </div>
-    
-      <!-- STATS -->
-      <div class="profile-stats" id="stats"></div>
-    
-      <!-- EDIT BUTTON -->
-      <button onclick="toggleEdit()" id="editBtn" class="edit-btn">
-        Edit Profile
-      </button>
-    
-      <!-- EDIT PANEL -->
-      <div id="editPanel" class="edit-panel" style="display:none">
-    
-        <div class="grid">
-    
-          <div>
-            <label>Username</label>
-            <input id="username">
-          </div>
-    
-          <div>
-            <label>Position</label>
-            <select id="position">
-              <option value="">Select position</option>
-              <option>GK</option>
-              <option>CB</option>
-              <option>LB</option>
-              <option>RB</option>
-              <option>CM</option>
-              <option>CAM</option>
-              <option>ST</option>
-              <option>LW</option>
-              <option>RW</option>
-            </select>
-          </div>
-    
-          <div>
-            <label>Country</label>
-            <input id="country">
-          </div>
-    
-          <div>
-            <label>Discord</label>
-            <input id="discord">
-          </div>
-    
-          <div>
-            <label>Twitter</label>
-            <input id="twitter">
-          </div>
-    
-          <div>
-            <label>Instagram</label>
-            <input id="instagram">
-          </div>
-    
-          <div>
-            <label>TikTok</label>
-            <input id="tiktok">
-          </div>
-    
-          <div class="full">
-            <label>Music</label>
-            <input id="music">
-          </div>
-    
-        </div>
-    
-        <button onclick="saveProfile()" class="save-btn">
-          Save Changes
-        </button>
-    
-      </div>
-    
-    </div>
 
     </div>
 
     <!-- SOCIALS -->
-    <div id="socialsView" class="profile-socials"></div>
+    <div class="profile-card">
+      <h3>Socials</h3>
+      <div id="socialsView"></div>
+    </div>
 
     <!-- MUSIC -->
-    <div id="musicView"></div>
+    <div class="profile-card">
+      <h3>Music</h3>
+      <div id="musicView"></div>
+    </div>
 
     <!-- STATS -->
     <div class="profile-stats" id="stats"></div>
 
-    <!-- EDIT MODE -->
-    <div id="editPanel" style="display:none;margin-top:20px">
+    <!-- EDIT PANEL -->
+    <div id="editPanel" class="edit-panel" style="display:none">
 
-      <label>Username</label>
-      <input id="username">
+      <div class="grid">
 
-      <label>Position</label>
-      <select id="position">
-        <option value="">Select position</option>
-        <option>GK</option>
-        <option>CB</option>
-        <option>LB</option>
-        <option>RB</option>
-        <option>CM</option>
-        <option>CAM</option>
-        <option>ST</option>
-        <option>LW</option>
-        <option>RW</option>
-      </select>
+        <div>
+          <label>Username</label>
+          <input id="username">
+        </div>
 
-      <label>Country</label>
-      <input id="country" placeholder="England">
+        <div>
+          <label>Position</label>
+          <select id="position">
+            <option value="">Select position</option>
+            <option>GK</option>
+            <option>CB</option>
+            <option>LB</option>
+            <option>RB</option>
+            <option>CM</option>
+            <option>CAM</option>
+            <option>ST</option>
+            <option>LW</option>
+            <option>RW</option>
+          </select>
+        </div>
 
-      <label>Discord</label>
-      <input id="discord">
+        <div>
+          <label>Country</label>
+          <input id="country">
+        </div>
 
-      <label>Twitter</label>
-      <input id="twitter">
+        <div>
+          <label>Discord</label>
+          <input id="discord">
+        </div>
 
-      <label>Instagram</label>
-      <input id="instagram">
+        <div>
+          <label>Twitter</label>
+          <input id="twitter">
+        </div>
 
-      <label>TikTok</label>
-      <input id="tiktok">
+        <div>
+          <label>Instagram</label>
+          <input id="instagram">
+        </div>
 
-      <label>Music (Spotify/YouTube link)</label>
-      <input id="music">
+        <div>
+          <label>TikTok</label>
+          <input id="tiktok">
+        </div>
 
-      <button onclick="saveProfile()">Save</button>
+        <div class="full">
+          <label>Music</label>
+          <input id="music">
+        </div>
+
+      </div>
+
+      <button onclick="saveProfile()" class="save-btn">
+        Save Changes
+      </button>
 
     </div>
 
