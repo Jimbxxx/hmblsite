@@ -12,17 +12,111 @@
     </div>
 
     <!-- PROFILE CARD -->
-    <div class="profile-card">
-
-      <img id="pfp" class="profile-pfp">
-
-      <div style="flex:1">
-
-        <h1 id="displayName"></h1>
-        <div id="displayPosition" class="profile-position"></div>
-        <div id="displayCountry"></div>
-
+    <div class="profile-wrap">
+    
+      <!-- TOP PROFILE CARD -->
+      <div class="profile-main-card">
+    
+        <img id="pfp" class="profile-avatar">
+    
+        <div class="profile-info">
+    
+          <h1 id="displayName"></h1>
+    
+          <div class="profile-badges">
+            <span id="displayPosition" class="badge"></span>
+            <span id="displayCountry" class="badge"></span>
+          </div>
+    
+        </div>
+    
       </div>
+    
+      <!-- SOCIALS -->
+      <div class="profile-card">
+        <h3>Socials</h3>
+        <div id="socialsView"></div>
+      </div>
+    
+      <!-- MUSIC -->
+      <div class="profile-card">
+        <h3>Music</h3>
+        <div id="musicView"></div>
+      </div>
+    
+      <!-- STATS -->
+      <div class="profile-stats" id="stats"></div>
+    
+      <!-- EDIT BUTTON -->
+      <button onclick="toggleEdit()" id="editBtn" class="edit-btn">
+        Edit Profile
+      </button>
+    
+      <!-- EDIT PANEL -->
+      <div id="editPanel" class="edit-panel" style="display:none">
+    
+        <div class="grid">
+    
+          <div>
+            <label>Username</label>
+            <input id="username">
+          </div>
+    
+          <div>
+            <label>Position</label>
+            <select id="position">
+              <option value="">Select position</option>
+              <option>GK</option>
+              <option>CB</option>
+              <option>LB</option>
+              <option>RB</option>
+              <option>CM</option>
+              <option>CAM</option>
+              <option>ST</option>
+              <option>LW</option>
+              <option>RW</option>
+            </select>
+          </div>
+    
+          <div>
+            <label>Country</label>
+            <input id="country">
+          </div>
+    
+          <div>
+            <label>Discord</label>
+            <input id="discord">
+          </div>
+    
+          <div>
+            <label>Twitter</label>
+            <input id="twitter">
+          </div>
+    
+          <div>
+            <label>Instagram</label>
+            <input id="instagram">
+          </div>
+    
+          <div>
+            <label>TikTok</label>
+            <input id="tiktok">
+          </div>
+    
+          <div class="full">
+            <label>Music</label>
+            <input id="music">
+          </div>
+    
+        </div>
+    
+        <button onclick="saveProfile()" class="save-btn">
+          Save Changes
+        </button>
+    
+      </div>
+    
+    </div>
 
     </div>
 
