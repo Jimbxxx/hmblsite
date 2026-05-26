@@ -1,7 +1,6 @@
 console.log("USER PROFILE LOADED");
 
-// ================= CONFIG =================
-window.API = window.CONFIG.API_BASE;
+const API = window.CONFIG.API_BASE;
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -20,8 +19,7 @@ async function loadUserProfile() {
 
   try {
 
-    const res = await fetch(`${window.API}/players`);
-
+    const res = await fetch(`${API}/players`);
     const json = await res.json();
 
     const players = Object.values(json.data || {});
@@ -40,33 +38,28 @@ async function loadUserProfile() {
     renderProfile(player);
 
   } catch (err) {
-
     console.log(err);
-
     showError("Error loading profile");
-
   }
 }
 
-// ================= URL USERNAME =================
+// ================= FIXED URL PARSER =================
+function getUsernameFromURL() {
+  const path = window.location.pathname;
+
+  // removes first slash safely
+  return path.split("/").filter(Boolean)[0];
+}
+
+// ================= RENDER =================
 function renderProfile(player) {
 
   const el = document.getElementById("profile");
+
   if (!el) return;
 
-  const isOwnProfile =
-    localStorage.getItem("hmbl_user") &&
-    JSON.parse(localStorage.getItem("hmbl_user")).username === player.username;
-
   el.innerHTML = `
-  
     <div class="profile-view">
-
-      ${isOwnProfile ? `
-        <button onclick="goEditProfile()" class="edit-btn">
-          Edit Profile
-        </button>
-      ` : ""}
 
       <img
         src="${player.pfp || "https://cdn.discordapp.com/embed/avatars/0.png"}"
@@ -80,21 +73,27 @@ function renderProfile(player) {
       </p>
 
       <div class="profile-stats">
+
         <div class="stat-box">
-          <h2>${player.goals || 0}</h2><p>Goals</p>
+          <h2>${player.goals || 0}</h2>
+          <p>Goals</p>
         </div>
 
         <div class="stat-box">
-          <h2>${player.assists || 0}</h2><p>Assists</p>
+          <h2>${player.assists || 0}</h2>
+          <p>Assists</p>
         </div>
 
         <div class="stat-box">
-          <h2>${player.points || 0}</h2><p>Points</p>
+          <h2>${player.points || 0}</h2>
+          <p>Points</p>
         </div>
 
         <div class="stat-box">
-          <h2>${player.clean_sheets || 0}</h2><p>Clean Sheets</p>
+          <h2>${player.clean_sheets || 0}</h2>
+          <p>Clean Sheets</p>
         </div>
+
       </div>
 
     </div>
@@ -103,15 +102,8 @@ function renderProfile(player) {
 
 // ================= ERROR =================
 function showError(msg) {
-
   const el = document.getElementById("profile");
-
   if (!el) return;
 
   el.innerHTML = `<h2>${msg}</h2>`;
-}
-
-
-function goEditProfile() {
-  window.location.href = "/profile.html";
 }
