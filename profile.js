@@ -1,7 +1,6 @@
 console.log("PROFILE JS LOADED");
 
-// ================= CONFIG =================
-window.API = window.CONFIG.API_BASE;
+const API = window.CONFIG.API_BASE;
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -21,7 +20,7 @@ async function loadProfile() {
   try {
 
     // ================= AUTH =================
-    const authRes = await fetch(`${window.API}/auth/me`, {
+    const authRes = await fetch(`${API}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -39,26 +38,16 @@ async function loadProfile() {
 
     const user = auth.user;
 
-    // ================= USERNAME =================
+    // ================= INPUTS =================
     const usernameEl = document.getElementById("username");
+    if (usernameEl) usernameEl.value = user.username || "";
 
-    if (usernameEl) {
-      usernameEl.value = user.username || "";
-    }
-
-    // ================= POSITION =================
     const positionEl = document.getElementById("position");
+    if (positionEl) positionEl.value = user.position || "";
 
-    if (positionEl) {
-      positionEl.value = user.position || "";
-    }
-
-    // ================= GET PLAYERS =================
-    const playersRes = await fetch(`${window.API}/players`);
-
+    // ================= PLAYERS =================
+    const playersRes = await fetch(`${API}/players`);
     const playersJson = await playersRes.json();
-
-    console.log("PLAYERS:", playersJson);
 
     const players = Object.values(playersJson.data || {});
 
@@ -66,31 +55,25 @@ async function loadProfile() {
       p => p.discord_id === user.discord_id
     );
 
-    console.log("MATCHED PLAYER:", player);
+    console.log("PLAYER:", player);
 
     // ================= PFP =================
     const pfpEl = document.getElementById("pfp");
 
     if (pfpEl) {
-
-      const pfpUrl =
+      const url =
         player?.pfp ||
         "https://cdn.discordapp.com/embed/avatars/0.png";
 
-      console.log("SETTING PFP:", pfpUrl);
-
-      pfpEl.src = pfpUrl;
+      pfpEl.src = url;
 
       pfpEl.onerror = () => {
-        pfpEl.src =
-          "https://cdn.discordapp.com/embed/avatars/0.png";
+        pfpEl.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       };
     }
 
   } catch (err) {
-
     console.log("PROFILE ERROR:", err);
-
   }
 }
 
@@ -99,36 +82,24 @@ async function saveProfile() {
 
   const token = localStorage.getItem("hmbl_token");
 
-  const username =
-    document.getElementById("username")
-    ?.value
-    ?.trim();
-
-  const position =
-    document.getElementById("position")
-    ?.value
-    ?.trim();
+  const username = document.getElementById("username")?.value?.trim();
+  const position = document.getElementById("position")?.value?.trim();
 
   if (!username) return;
 
   try {
 
-    const res = await fetch(
-      `${window.API}/players/update-profile`,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-
-        body: JSON.stringify({
-          username,
-          position
-        })
-      }
-    );
+    const res = await fetch(`${API}/players/update-profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        username,
+        position
+      })
+    });
 
     const json = await res.json();
 
@@ -139,9 +110,7 @@ async function saveProfile() {
     }
 
   } catch (err) {
-
     console.log("SAVE ERROR:", err);
-
   }
 }
 
@@ -150,6 +119,6 @@ function skipProfile() {
   window.location.href = "/";
 }
 
-// ================= EXPOSE =================
+// expose
 window.saveProfile = saveProfile;
 window.skipProfile = skipProfile;
