@@ -1,80 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HMBL | Profile Setup</title>
+<main class="container">
 
-  <link rel="stylesheet" href="style.css">
-</head>
+  <div class="panel">
 
-<body>
+    <!-- TOP BAR -->
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="hero-top">USER PROFILE</div>
 
-  <div class="bg-glow" id="glow"></div>
-
-  <!-- NAV -->
-  <header class="nav">
-
-    <div class="logo">
-      <img src="assets/logo.png" class="logo-img">
+      <button onclick="toggleEdit()" id="editBtn">
+        Edit Profile
+      </button>
     </div>
 
-    <nav class="links">
-      <button onclick="window.location.href='/'">Home</button>
-      <button onclick="window.location.href='/profile.html'">Profile</button>
-    </nav>
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
 
-  </header>
+      <img id="pfp" class="profile-pfp">
 
-  <!-- MAIN -->
-  <main class="container">
+      <div style="flex:1">
 
-    <div class="panel">
-
-      <div class="hero-top">PROFILE SETUP</div>
-
-      <h1 id="title">Complete Your Profile</h1>
-
-      <p style="opacity:0.7;margin-top:-10px">
-        Set your identity for the HMBL system
-      </p>
-
-      <!-- CARD -->
-      <div class="profile-card">
-
-        <img id="pfp" class="profile-pfp" alt="Discord PFP">
-
-        <div class="profile-form">
-
-          <label>Username</label>
-          <input id="username" type="text" placeholder="Your username">
-
-          <label>Position</label>
-          <input id="position" type="text" placeholder="ST, CM, GK">
-
-        </div>
-
-      </div>
-
-      <!-- BUTTONS -->
-      <div class="profile-buttons">
-
-        <button onclick="saveProfile()">
-          Save Profile
-        </button>
-
-        <button onclick="skipProfile()" id="skipBtn">
-          Skip
-        </button>
+        <h1 id="displayName"></h1>
+        <div id="displayPosition" class="profile-position"></div>
+        <div id="displayCountry"></div>
 
       </div>
 
     </div>
 
-  </main>
+    <!-- SOCIALS -->
+    <div id="socialsView" class="profile-socials"></div>
 
-  <script src="config.js"></script>
-  <script src="profile.js"></script>
+    <!-- MUSIC -->
+    <div id="musicView"></div>
 
-</body>
-</html>
+    <!-- STATS -->
+    <div class="profile-stats" id="stats"></div>
+
+    <!-- EDIT MODE -->
+    <div id="editPanel" style="display:none;margin-top:20px">
+
+      <label>Username</label>
+      <input id="username">
+
+      <label>Position</label>
+      <select id="position">
+        <option value="">Select position</option>
+        <option>GK</option>
+        <option>CB</option>
+        <option>LB</option>
+        <option>RB</option>
+        <option>CM</option>
+        <option>CAM</option>
+        <option>ST</option>
+        <option>LW</option>
+        <option>RW</option>
+      </select>
+
+      <label>Country</label>
+      <input id="country" placeholder="England">
+
+      <label>Discord</label>
+      <input id="discord">
+
+      <label>Twitter</label>
+      <input id="twitter">
+
+      <label>Instagram</label>
+      <input id="instagram">
+
+      <label>TikTok</label>
+      <input id="tiktok">
+
+      <label>Music (Spotify/YouTube link)</label>
+      <input id="music">
+
+      <button onclick="saveProfile()">Save</button>
+
+    </div>
+
+  </div>
+
+</main>
