@@ -32,111 +32,106 @@
 <!-- MAIN -->
 <main class="container">
 
-  <div class="profile-wrap">
+  <div class="profile-editor">
 
-    <!-- TOP BAR -->
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div class="hero-top">USER PROFILE</div>
+    <!-- LEFT SIDE -->
+    <div class="editor-sidebar">
 
-      <button onclick="toggleEdit()" class="edit-btn">
-        Edit Profile
-      </button>
-    </div>
-
-    <!-- MAIN PROFILE CARD -->
-    <div class="profile-main-card">
-
-      <img id="pfp" class="profile-avatar">
-
-      <div class="profile-info">
-
-        <h1 id="displayName"></h1>
-
-        <div class="profile-badges">
-          <span id="displayPosition" class="badge"></span>
-          <span id="displayCountry" class="badge"></span>
-        </div>
-
+      <div class="sidebar-header">
+        <h2>Edit Profile</h2>
+        <p>Customize your HMBL identity.</p>
       </div>
 
-    </div>
+      <div class="editor-group">
+        <label>Username</label>
+        <input id="username" placeholder="Username">
+      </div>
 
-    <!-- SOCIALS -->
-    <div class="profile-card">
-      <h3>Socials</h3>
-      <div id="socialsView"></div>
-    </div>
+      <div class="editor-group">
+        <label>Position</label>
 
-    <!-- MUSIC -->
-    <div class="profile-card">
-      <h3>Music</h3>
-      <div id="musicView"></div>
-    </div>
+        <select id="position">
+          <option value="">Select position</option>
+          <option>GK</option>
+          <option>CB</option>
+          <option>LB</option>
+          <option>RB</option>
+          <option>CM</option>
+          <option>CAM</option>
+          <option>ST</option>
+          <option>LW</option>
+          <option>RW</option>
+        </select>
+      </div>
 
-    <!-- STATS -->
-    <div class="profile-stats" id="stats"></div>
+      <div class="editor-group">
+        <label>Country</label>
+        <input id="country" placeholder="Country">
+      </div>
 
-    <!-- EDIT PANEL -->
-    <div id="editPanel" class="edit-panel" style="display:none">
+      <div class="editor-group">
+        <label>Discord</label>
+        <input id="discord" placeholder="Discord username">
+      </div>
 
-      <div class="grid">
+      <div class="editor-group">
+        <label>Twitter</label>
+        <input id="twitter" placeholder="@username">
+      </div>
 
-        <div>
-          <label>Username</label>
-          <input id="username">
-        </div>
+      <div class="editor-group">
+        <label>Instagram</label>
+        <input id="instagram" placeholder="@username">
+      </div>
 
-        <div>
-          <label>Position</label>
-          <select id="position">
-            <option value="">Select position</option>
-            <option>GK</option>
-            <option>CB</option>
-            <option>LB</option>
-            <option>RB</option>
-            <option>CM</option>
-            <option>CAM</option>
-            <option>ST</option>
-            <option>LW</option>
-            <option>RW</option>
-          </select>
-        </div>
+      <div class="editor-group">
+        <label>TikTok</label>
+        <input id="tiktok" placeholder="@username">
+      </div>
 
-        <div>
-          <label>Country</label>
-          <input id="country">
-        </div>
-
-        <div>
-          <label>Discord</label>
-          <input id="discord">
-        </div>
-
-        <div>
-          <label>Twitter</label>
-          <input id="twitter">
-        </div>
-
-        <div>
-          <label>Instagram</label>
-          <input id="instagram">
-        </div>
-
-        <div>
-          <label>TikTok</label>
-          <input id="tiktok">
-        </div>
-
-        <div class="full">
-          <label>Music</label>
-          <input id="music">
-        </div>
-
+      <div class="editor-group">
+        <label>Music Link</label>
+        <input id="music" placeholder="Spotify / YouTube">
       </div>
 
       <button onclick="saveProfile()" class="save-btn">
-        Save Changes
+        Save Profile
       </button>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="profile-preview">
+
+      <div class="preview-banner"></div>
+
+      <div class="preview-card">
+
+        <img id="pfp" class="preview-avatar">
+
+        <div class="preview-info">
+
+          <h1 id="displayName">Username</h1>
+
+          <div class="preview-tags">
+            <span id="displayPosition" class="preview-tag">
+              Position
+            </span>
+
+            <span id="displayCountry" class="preview-tag">
+              Country
+            </span>
+          </div>
+
+          <div id="socialsView" class="preview-socials"></div>
+
+          <div id="musicView" class="preview-music"></div>
+
+        </div>
+
+      </div>
+
+      <div class="stats-grid" id="stats"></div>
 
     </div>
 
