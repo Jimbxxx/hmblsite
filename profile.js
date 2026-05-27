@@ -70,6 +70,7 @@ async function loadProfile() {
 
     // ================= RENDER =================
     renderDisplay(user);
+    livePreview();
 
   } catch (err) {
     console.log(err);
