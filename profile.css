@@ -1,5 +1,5 @@
 /* =========================================
-   PROFILE EDITOR (ONLY profile.html)
+   PROFILE EDITOR
 ========================================= */
 
 .profile-editor {
@@ -201,8 +201,6 @@
   font-size: 13px;
 }
 
-/* SOCIALS */
-
 .preview-socials {
   margin-top: 18px;
 
@@ -235,10 +233,87 @@
   transform: translateY(-2px);
 }
 
-/* MUSIC */
-
 .preview-music {
   margin-top: 18px;
+}
+
+/* =========================================
+   PUBLIC PROFILE
+========================================= */
+
+.profile-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  align-items: center;
+
+  text-align: center;
+}
+
+.profile-pfp-large {
+  width: 120px;
+  height: 120px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
+  border: 3px solid rgba(255,106,0,0.3);
+
+  box-shadow:
+    0 0 30px rgba(255,106,0,0.15);
+}
+
+.profile-position {
+  opacity: 0.7;
+  margin-top: -10px;
+}
+
+.profile-stats {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(180px, 1fr));
+
+  gap: 16px;
+
+  margin-top: 20px;
+}
+
+.stat-box {
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: rgba(8,8,8,0.95);
+
+  border: 1px solid rgba(255,106,0,0.12);
+
+  text-align: center;
+
+  transition: 0.2s;
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(255,106,0,0.3);
+}
+
+.stat-box h2 {
+  margin: 0;
+
+  font-size: 32px;
+
+  color: #ff8c42;
+}
+
+.stat-box p {
+  margin-top: 8px;
+
+  opacity: 0.6;
 }
 
 /* MOBILE */
