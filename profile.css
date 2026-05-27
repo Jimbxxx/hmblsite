@@ -1,6 +1,6 @@
-/* =========================
-   PAGE
-========================= */
+/* =========================================
+   PROFILE EDITOR (ONLY profile.html)
+========================================= */
 
 .profile-editor {
   display: grid;
@@ -11,9 +11,7 @@
   margin-top: 40px;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
+/* SIDEBAR */
 
 .editor-sidebar {
   background: rgba(8,8,8,0.96);
@@ -23,9 +21,6 @@
   border-radius: 22px;
 
   padding: 24px;
-
-  position: sticky;
-  top: 30px;
 
   height: fit-content;
 
@@ -78,14 +73,12 @@
 
 .editor-group input:focus,
 .editor-group select:focus {
-  border-color: rgba(255,106,0,0.5);
+  border-color: rgba(255,106,0,0.45);
 
-  box-shadow: 0 0 18px rgba(255,106,0,0.12);
+  box-shadow: 0 0 18px rgba(255,106,0,0.10);
 }
 
-/* =========================
-   SAVE BUTTON
-========================= */
+/* SAVE BUTTON */
 
 .save-btn {
   width: 100%;
@@ -119,9 +112,7 @@
     0 0 25px rgba(255,106,0,0.25);
 }
 
-/* =========================
-   PREVIEW
-========================= */
+/* PREVIEW */
 
 .profile-preview {
   display: flex;
@@ -172,10 +163,6 @@
     0 0 40px rgba(255,106,0,0.05);
 }
 
-/* =========================
-   AVATAR
-========================= */
-
 .preview-avatar {
   width: 120px;
   height: 120px;
@@ -189,10 +176,6 @@
   box-shadow:
     0 0 35px rgba(255,106,0,0.2);
 }
-
-/* =========================
-   INFO
-========================= */
 
 .preview-info h1 {
   margin: 0;
@@ -218,9 +201,7 @@
   font-size: 13px;
 }
 
-/* =========================
-   SOCIALS
-========================= */
+/* SOCIALS */
 
 .preview-socials {
   margin-top: 18px;
@@ -229,99 +210,6 @@
   flex-wrap: wrap;
   gap: 10px;
 }
-
-.social-pill {
-  padding: 8px 12px;
-
-  border-radius: 12px;
-
-  background: rgba(255,255,255,0.03);
-
-  border: 1px solid rgba(255,106,0,0.12);
-
-  font-size: 13px;
-}
-
-/* =========================
-   MUSIC
-========================= */
-
-.preview-music {
-  margin-top: 18px;
-}
-
-.preview-music a {
-  color: #ff8c42;
-  text-decoration: none;
-}
-
-/* =========================
-   STATS
-========================= */
-
-.stats-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(180px, 1fr));
-
-  gap: 16px;
-}
-
-.stats-grid div {
-  padding: 20px;
-
-  border-radius: 18px;
-
-  background: rgba(8,8,8,0.95);
-
-  border: 1px solid rgba(255,106,0,0.12);
-
-  text-align: center;
-
-  font-size: 15px;
-
-  transition: 0.2s;
-}
-
-.stats-grid div:hover {
-  transform: translateY(-4px);
-
-  border-color: rgba(255,106,0,0.3);
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 1000px) {
-
-  .profile-editor {
-    grid-template-columns: 1fr;
-  }
-
-  .editor-sidebar {
-    position: relative;
-    top: unset;
-  }
-
-  .preview-card {
-    flex-direction: column;
-    text-align: center;
-
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .preview-tags,
-  .preview-socials {
-    justify-content: center;
-  }
-}
-
-/* =========================
-   SOCIAL BUTTONS
-========================= */
 
 .social-pill {
   padding: 10px 14px;
@@ -347,20 +235,30 @@
   transform: translateY(-2px);
 }
 
-/* =========================
-   STAT STYLE
-========================= */
+/* MUSIC */
 
-.stats-grid div h2 {
-  margin: 0;
-
-  color: #ff8c42;
-
-  font-size: 32px;
+.preview-music {
+  margin-top: 18px;
 }
 
-.stats-grid div p {
-  margin-top: 8px;
+/* MOBILE */
 
-  opacity: 0.6;
+@media (max-width: 1000px) {
+
+  .profile-editor {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-card {
+    flex-direction: column;
+    text-align: center;
+
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .preview-tags,
+  .preview-socials {
+    justify-content: center;
+  }
 }
