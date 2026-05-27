@@ -318,3 +318,49 @@
     justify-content: center;
   }
 }
+
+/* =========================
+   SOCIAL BUTTONS
+========================= */
+
+.social-pill {
+  padding: 10px 14px;
+
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.03);
+
+  border: 1px solid rgba(255,106,0,0.12);
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  transition: 0.2s;
+}
+
+.social-pill:hover {
+  border-color: rgba(255,106,0,0.4);
+
+  transform: translateY(-2px);
+}
+
+/* =========================
+   STAT STYLE
+========================= */
+
+.stats-grid div h2 {
+  margin: 0;
+
+  color: #ff8c42;
+
+  font-size: 32px;
+}
+
+.stats-grid div p {
+  margin-top: 8px;
+
+  opacity: 0.6;
+}
