@@ -45,10 +45,18 @@ async function loadUserProfile() {
 
 // ================= FIXED URL PARSER =================
 function getUsernameFromURL() {
-  const path = window.location.pathname;
 
-  // removes first slash safely
-  return path.split("/").filter(Boolean)[0];
+  const path = window.location.pathname
+    .replace(/^\/+/, "");
+
+  if (
+    path === "" ||
+    path.endsWith(".html")
+  ) {
+    return null;
+  }
+
+  return decodeURIComponent(path);
 }
 
 // ================= RENDER =================
@@ -57,6 +65,8 @@ function renderProfile(player) {
   const el = document.getElementById("profile");
 
   if (!el) return;
+
+  const musicHTML = renderMusic(player.music);
 
   el.innerHTML = `
     <div class="profile-view">
@@ -96,8 +106,79 @@ function renderProfile(player) {
 
       </div>
 
+      ${musicHTML}
+
     </div>
   `;
+}
+
+function renderMusic(link) {
+
+  if (!link) return "";
+
+  // SPOTIFY
+  if (link.includes("spotify.com")) {
+
+    const cleaned = link
+      .replace(
+        "open.spotify.com/",
+        "open.spotify.com/embed/"
+      );
+
+    return `
+      <iframe
+        style="
+          border-radius:18px;
+          margin-top:24px;
+          width:100%;
+          max-width:700px;
+        "
+        src="${cleaned}"
+        height="152"
+        frameborder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      ></iframe>
+    `;
+  }
+
+  // YOUTUBE
+  if (
+    link.includes("youtube.com") ||
+    link.includes("youtu.be")
+  ) {
+
+    let videoId = "";
+
+    if (link.includes("watch?v=")) {
+      videoId = link.split("watch?v=")[1];
+    }
+
+    if (link.includes("youtu.be/")) {
+      videoId = link.split("youtu.be/")[1];
+    }
+
+    videoId = videoId.split("&")[0];
+
+    return `
+      <iframe
+        width="100%"
+        height="380"
+        src="https://www.youtube.com/embed/${videoId}"
+        frameborder="0"
+        allowfullscreen
+        style="
+          border:none;
+          border-radius:18px;
+          margin-top:24px;
+          max-width:700px;
+        "
+      ></iframe>
+    `;
+  }
+
+  return "";
 }
 
 // ================= ERROR =================
