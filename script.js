@@ -8,8 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   handleAuthRedirect();
   setupAuthUI();
 
-  if (window.location.pathname.includes("profile.html")) return;
-
   load();
   setupTabs();
   setupGlow();
