@@ -1,293 +1,320 @@
-/* ================= PROFILE PAGE LAYOUT ================= */
+/* =========================
+   PAGE
+========================= */
 
-.profile-view {
+.profile-editor {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 28px;
+
+  width: 100%;
+  margin-top: 40px;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.editor-sidebar {
+  background: rgba(8,8,8,0.96);
+
+  border: 1px solid rgba(255,106,0,0.14);
+
+  border-radius: 22px;
+
+  padding: 24px;
+
+  position: sticky;
+  top: 30px;
+
+  height: fit-content;
+
+  box-shadow:
+    0 0 40px rgba(255,106,0,0.05),
+    inset 0 0 30px rgba(255,106,0,0.03);
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.sidebar-header p {
+  opacity: 0.55;
+  margin-top: 6px;
+  margin-bottom: 24px;
+}
+
+.editor-group {
+  margin-bottom: 18px;
+}
+
+.editor-group label {
+  display: block;
+  margin-bottom: 8px;
+
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.editor-group input,
+.editor-group select {
+  width: 100%;
+
+  padding: 14px;
+
+  background: #050505;
+
+  border: 1px solid rgba(255,106,0,0.12);
+
+  border-radius: 14px;
+
+  color: white;
+
+  outline: none;
+
+  transition: 0.2s;
+}
+
+.editor-group input:focus,
+.editor-group select:focus {
+  border-color: rgba(255,106,0,0.5);
+
+  box-shadow: 0 0 18px rgba(255,106,0,0.12);
+}
+
+/* =========================
+   SAVE BUTTON
+========================= */
+
+.save-btn {
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff6a00,
+      #ff8c42
+    );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 25px rgba(255,106,0,0.25);
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.profile-preview {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* MAIN PROFILE CARD */
-.profile-header {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+.preview-banner {
+  height: 180px;
 
-  padding: 22px;
+  border-radius: 24px;
 
-  background: #0d0d0d;
-  border: 1px solid rgba(255,106,0,0.12);
-  border-radius: 16px;
+  background:
+    radial-gradient(circle at top left,
+      rgba(255,106,0,0.3),
+      transparent 40%),
+    linear-gradient(
+      135deg,
+      #111,
+      #050505
+    );
 
-  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,106,0,0.1);
 }
 
-/* BIG PFP */
-.profile-pfp-large {
-  width: 110px;
-  height: 110px;
+.preview-card {
+  margin-top: -90px;
+
+  margin-left: 30px;
+  margin-right: 30px;
+
+  padding: 26px;
+
+  background: rgba(8,8,8,0.96);
+
+  border: 1px solid rgba(255,106,0,0.14);
+
+  border-radius: 24px;
+
+  display: flex;
+  gap: 24px;
+
+  align-items: center;
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 0 40px rgba(255,106,0,0.05);
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+.preview-avatar {
+  width: 120px;
+  height: 120px;
 
   border-radius: 50%;
+
   object-fit: cover;
 
-  border: 2px solid rgba(255,106,0,0.25);
-  box-shadow: 0 0 18px rgba(255,106,0,0.12);
+  border: 3px solid rgba(255,106,0,0.35);
+
+  box-shadow:
+    0 0 35px rgba(255,106,0,0.2);
 }
 
-/* NAME AREA */
-.profile-header h1 {
+/* =========================
+   INFO
+========================= */
+
+.preview-info h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 38px;
 }
 
-.profile-position {
-  margin-top: 6px;
-  opacity: 0.7;
-  font-size: 14px;
-}
-
-/* ================= STATS GRID ================= */
-
-.profile-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 14px;
-}
-
-/* STAT BOX */
-.stat-box {
-  background: #0d0d0d;
-
-  border: 1px solid rgba(255,106,0,0.10);
-  border-radius: 14px;
-
-  padding: 18px;
-
-  text-align: center;
-
-  transition: 0.2s;
-}
-
-.stat-box:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255,106,0,0.35);
-  box-shadow: 0 0 16px rgba(255,106,0,0.08);
-}
-
-.stat-box h2 {
-  margin: 0;
-  font-size: 24px;
-  color: #ff6a00;
-}
-
-.stat-box p {
-  margin: 6px 0 0;
-  opacity: 0.6;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-
-/* ================= LOADING / ERROR ================= */
-
-#profile h2 {
-  text-align: center;
-  opacity: 0.7;
-}
-
-/* ================= MOBILE ================= */
-
-@media (max-width: 700px) {
-
-  .profile-header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .profile-pfp-large {
-    width: 90px;
-    height: 90px;
-  }
-}
-
-/* ================= PROFILE PAGE ================= */
-
-.profile-wrap {
+.preview-tags {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  gap: 10px;
+
+  margin-top: 10px;
 }
 
-/* MAIN CARD */
-.profile-main-card {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-
-  padding: 20px;
-
-  background: rgba(10,10,10,0.95);
-  border: 1px solid rgba(255,106,0,0.15);
-
-  border-radius: 18px;
-
-  box-shadow: 0 0 30px rgba(255,106,0,0.05);
-}
-
-.profile-avatar {
-  width: 90px;
-  height: 90px;
-
-  border-radius: 50%;
-  object-fit: cover;
-
-  border: 2px solid rgba(255,106,0,0.35);
-
-  box-shadow: 0 0 25px rgba(255,106,0,0.15);
-}
-
-.profile-info h1 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.profile-badges {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
-}
-
-.badge {
-  padding: 4px 10px;
-
-  font-size: 12px;
-
-  background: #0d0d0d;
-
-  border: 1px solid rgba(255,106,0,0.2);
+.preview-tag {
+  padding: 8px 14px;
 
   border-radius: 999px;
 
-  opacity: 0.8;
+  background: rgba(255,255,255,0.03);
+
+  border: 1px solid rgba(255,106,0,0.15);
+
+  font-size: 13px;
 }
 
-/* CARDS */
-.profile-card {
-  padding: 16px;
+/* =========================
+   SOCIALS
+========================= */
 
-  background: rgba(10,10,10,0.92);
+.preview-socials {
+  margin-top: 18px;
 
-  border: 1px solid rgba(255,106,0,0.10);
-
-  border-radius: 14px;
-}
-
-/* SOCIALS */
-#socialsView div {
-  padding: 6px 0;
-  opacity: 0.75;
-}
-
-/* MUSIC */
-#musicView a {
-  color: #ff6a00;
-  text-decoration: none;
-}
-
-/* STATS (GUNS.LOL STYLE GRID) */
-.profile-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.profile-stats div {
-  background: #0d0d0d;
-
-  border: 1px solid rgba(255,106,0,0.1);
+.social-pill {
+  padding: 8px 12px;
 
   border-radius: 12px;
 
-  padding: 12px;
+  background: rgba(255,255,255,0.03);
 
-  text-align: center;
+  border: 1px solid rgba(255,106,0,0.12);
+
+  font-size: 13px;
 }
 
-/* EDIT BUTTON */
-.edit-btn {
-  padding: 10px;
+/* =========================
+   MUSIC
+========================= */
 
-  background: #0d0d0d;
+.preview-music {
+  margin-top: 18px;
+}
 
-  border: 1px solid rgba(255,106,0,0.25);
+.preview-music a {
+  color: #ff8c42;
+  text-decoration: none;
+}
 
-  color: white;
+/* =========================
+   STATS
+========================= */
 
-  border-radius: 12px;
+.stats-grid {
+  display: grid;
 
-  cursor: pointer;
+  grid-template-columns:
+    repeat(auto-fit, minmax(180px, 1fr));
+
+  gap: 16px;
+}
+
+.stats-grid div {
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: rgba(8,8,8,0.95);
+
+  border: 1px solid rgba(255,106,0,0.12);
+
+  text-align: center;
+
+  font-size: 15px;
 
   transition: 0.2s;
 }
 
-.edit-btn:hover {
-  border-color: rgba(255,106,0,0.5);
-  transform: translateY(-2px);
+.stats-grid div:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(255,106,0,0.3);
 }
 
-/* EDIT PANEL */
-.edit-panel {
-  padding: 16px;
+/* =========================
+   MOBILE
+========================= */
 
-  background: rgba(10,10,10,0.95);
+@media (max-width: 1000px) {
 
-  border: 1px solid rgba(255,106,0,0.12);
+  .profile-editor {
+    grid-template-columns: 1fr;
+  }
 
-  border-radius: 16px;
-}
+  .editor-sidebar {
+    position: relative;
+    top: unset;
+  }
 
-.edit-panel .grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
+  .preview-card {
+    flex-direction: column;
+    text-align: center;
 
-.edit-panel .full {
-  grid-column: span 2;
-}
+    margin-left: 0;
+    margin-right: 0;
+  }
 
-.edit-panel input,
-.edit-panel select {
-  width: 100%;
-
-  padding: 10px;
-
-  background: #050505;
-
-  border: 1px solid rgba(255,106,0,0.15);
-
-  color: white;
-
-  border-radius: 10px;
-}
-
-/* SAVE */
-.save-btn {
-  margin-top: 12px;
-
-  width: 100%;
-
-  padding: 12px;
-
-  background: #0d0d0d;
-
-  border: 1px solid rgba(255,106,0,0.25);
-
-  color: #ff6a00;
-
-  border-radius: 12px;
-
-  cursor: pointer;
-}
-
-.save-btn:hover {
-  box-shadow: 0 0 20px rgba(255,106,0,0.15);
+  .preview-tags,
+  .preview-socials {
+    justify-content: center;
+  }
 }
