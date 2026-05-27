@@ -5,6 +5,10 @@ const API = window.CONFIG?.API_BASE;
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
   loadProfile();
+
+  document.querySelectorAll("input, select").forEach(el => {
+    el.addEventListener("input", livePreview);
+  });
 });
 
 // ================= LOAD =================
@@ -81,10 +85,10 @@ function renderDisplay(user) {
   if (socialsView) {
     const s = user.socials || {};
     socialsView.innerHTML = `
-      <div>Discord: ${s.discord || "-"}</div>
-      <div>Twitter: ${s.twitter || "-"}</div>
-      <div>Instagram: ${s.instagram || "-"}</div>
-      <div>TikTok: ${s.tiktok || "-"}</div>
+      ${s.discord ? `<div class="social-pill">${s.discord}</div>` : ""}
+      ${s.twitter ? `<div class="social-pill">${s.twitter}</div>` : ""}
+      ${s.instagram ? `<div class="social-pill">${s.instagram}</div>` : ""}
+      ${s.tiktok ? `<div class="social-pill">${s.tiktok}</div>` : ""}
     `;
   }
 
@@ -166,6 +170,34 @@ function toggleEdit() {
 
   edit.style.display =
     edit.style.display === "none" ? "block" : "none";
+}
+
+function livePreview() {
+
+  document.getElementById("displayName").textContent =
+    getVal("username") || "Username";
+
+  document.getElementById("displayPosition").textContent =
+    getVal("position") || "Position";
+
+  document.getElementById("displayCountry").textContent =
+    getVal("country") || "Country";
+
+  const socialsView = document.getElementById("socialsView");
+
+  socialsView.innerHTML = `
+    ${getVal("discord") ? `<div class="social-pill">${getVal("discord")}</div>` : ""}
+    ${getVal("twitter") ? `<div class="social-pill">${getVal("twitter")}</div>` : ""}
+    ${getVal("instagram") ? `<div class="social-pill">${getVal("instagram")}</div>` : ""}
+    ${getVal("tiktok") ? `<div class="social-pill">${getVal("tiktok")}</div>` : ""}
+  `;
+
+  const music = getVal("music");
+
+  document.getElementById("musicView").innerHTML =
+    music
+      ? `<a href="${music}" target="_blank">🎵 Music Link</a>`
+      : "";
 }
 
 window.saveProfile = saveProfile;
