@@ -4,7 +4,6 @@ const API = window.CONFIG?.API_BASE;
 
 let CURRENT_USER = null;
 
-// ================= INIT =================
 document.addEventListener("DOMContentLoaded", async () => {
 
   await loadProfile();
@@ -15,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 
-// ================= LOAD =================
 async function loadProfile() {
 
   const token = localStorage.getItem("hmbl_token");
@@ -38,6 +36,7 @@ async function loadProfile() {
     if (auth.status !== "success") {
 
       localStorage.removeItem("hmbl_token");
+
       window.location.href = "/";
       return;
     }
@@ -46,7 +45,6 @@ async function loadProfile() {
 
     const user = CURRENT_USER;
 
-    // ================= INPUTS =================
     setVal("username", user.username);
     setVal("position", user.position);
     setVal("country", user.country);
@@ -59,79 +57,98 @@ async function loadProfile() {
 
     setVal("music", user.music);
 
-    // ================= PFP =================
-    const pfp = document.getElementById("pfp");
-
-    if (pfp) {
-      pfp.src =
-        user.pfp ||
-        "https://cdn.discordapp.com/embed/avatars/0.png";
-    }
-
-    // ================= RENDER =================
-    renderDisplay(user);
-    livePreview();
+    renderProfile(user);
 
   } catch (err) {
     console.log(err);
   }
 }
 
-// ================= DISPLAY =================
-function renderDisplay(user) {
-
-  // NAME
-  document.getElementById("displayName").textContent =
-    user.username || "Unknown";
-
-  // POSITION
-  document.getElementById("displayPosition").textContent =
-    user.position || "No Position";
-
-  // COUNTRY
-  document.getElementById("displayCountry").textContent =
-    user.country || "Unknown";
-
-  // SOCIALS
-  renderSocials(user.socials || {});
-
-  // MUSIC
-  renderMusic(user.music);
-
-  // STATS
-  renderStats(user);
-
-}
-
-// ================= LIVE PREVIEW =================
 function livePreview() {
 
-  document.getElementById("displayName").textContent =
-    getVal("username") || "Username";
+  const updated = {
 
-  document.getElementById("displayPosition").textContent =
-    getVal("position") || "Position";
+    ...CURRENT_USER,
 
-  document.getElementById("displayCountry").textContent =
-    getVal("country") || "Country";
+    username: getVal("username"),
 
-  renderSocials({
-    twitter: getVal("twitter"),
-    instagram: getVal("instagram"),
-    tiktok: getVal("tiktok")
-  });
+    position: getVal("position"),
 
-  renderMusic(getVal("music"));
+    country: getVal("country"),
 
+    socials: {
+      twitter: getVal("twitter"),
+      instagram: getVal("instagram"),
+      tiktok: getVal("tiktok")
+    },
+
+    music: getVal("music")
+  };
+
+  renderProfile(updated);
 }
 
-// ================= SOCIALS =================
+function renderProfile(player) {
+
+  const el = document.getElementById("profile");
+
+  if (!el) return;
+
+  el.innerHTML = `
+    <div class="profile-view">
+
+      <img
+        src="${player.pfp || "https://cdn.discordapp.com/embed/avatars/0.png"}"
+        class="profile-pfp-large"
+      >
+
+      <h1>${player.username || "Unknown User"}</h1>
+
+      <p class="profile-position">
+        ${player.position || "No position set"}
+      </p>
+
+      <div class="profile-socials">
+
+        ${renderSocials(player.socials || {})}
+
+      </div>
+
+      <div class="profile-stats">
+
+        <div class="stat-box">
+          <h2>${player.goals || 0}</h2>
+          <p>Goals</p>
+        </div>
+
+        <div class="stat-box">
+          <h2>${player.assists || 0}</h2>
+          <p>Assists</p>
+        </div>
+
+        <div class="stat-box">
+          <h2>${player.points || 0}</h2>
+          <p>Points</p>
+        </div>
+
+        <div class="stat-box">
+          <h2>${player.clean_sheets || 0}</h2>
+          <p>Clean Sheets</p>
+        </div>
+
+      </div>
+
+      <div class="profile-music">
+        ${renderMusic(player.music)}
+      </div>
+
+    </div>
+  `;
+}
+
 function renderSocials(socials) {
 
-  const socialsView =
-    document.getElementById("socialsView");
-
-  socialsView.innerHTML = `
+  return `
     ${socials.twitter ? `
       <a
         href="https://twitter.com/${socials.twitter.replace("@", "")}"
@@ -162,34 +179,26 @@ function renderSocials(socials) {
       </a>
     ` : ""}
   `;
-
 }
 
-// ================= MUSIC =================
 function renderMusic(link) {
 
-  const musicView =
-    document.getElementById("musicView");
+  if (!link) return "";
 
-  if (!link) {
-    musicView.innerHTML = "";
-    return;
-  }
-
-  // SPOTIFY
   if (link.includes("spotify.com")) {
 
-    const cleaned = link
-      .replace("open.spotify.com/", "open.spotify.com/embed/");
+    const cleaned = link.replace(
+      "open.spotify.com/",
+      "open.spotify.com/embed/"
+    );
 
-    musicView.innerHTML = `
+    return `
       <iframe
         style="
-          border-radius:16px;
-          margin-top:16px;
+          border-radius:18px;
+          width:100%;
         "
         src="${cleaned}"
-        width="100%"
         height="152"
         frameborder="0"
         allowfullscreen=""
@@ -197,94 +206,14 @@ function renderMusic(link) {
         loading="lazy"
       ></iframe>
     `;
-
-    return;
   }
 
-  // YOUTUBE
-  if (
-    link.includes("youtube.com") ||
-    link.includes("youtu.be")
-  ) {
-
-    let videoId = "";
-
-    if (link.includes("watch?v=")) {
-      videoId = link.split("watch?v=")[1];
-    }
-
-    if (link.includes("youtu.be/")) {
-      videoId = link.split("youtu.be/")[1];
-    }
-
-    videoId = videoId.split("&")[0];
-
-    musicView.innerHTML = `
-      <iframe
-        width="100%"
-        height="220"
-        src="https://www.youtube.com/embed/${videoId}"
-        frameborder="0"
-        allowfullscreen
-        style="
-          border:none;
-          border-radius:18px;
-          margin-top:16px;
-        "
-      ></iframe>
-    `;
-
-    return;
-  }
-
-  // FALLBACK
-  musicView.innerHTML = `
-    <a
-      href="${link}"
-      target="_blank"
-      class="social-pill"
-    >
-      Open Music
-    </a>
-  `;
+  return "";
 }
 
-// ================= STATS =================
-function renderStats(user) {
-
-  const stats =
-    document.getElementById("stats");
-
-  stats.innerHTML = `
-
-    <div>
-      <h2>${user.goals || 0}</h2>
-      <p>Goals</p>
-    </div>
-
-    <div>
-      <h2>${user.assists || 0}</h2>
-      <p>Assists</p>
-    </div>
-
-    <div>
-      <h2>${user.points || 0}</h2>
-      <p>Points</p>
-    </div>
-
-    <div>
-      <h2>${user.clean_sheets || 0}</h2>
-      <p>Clean Sheets</p>
-    </div>
-
-  `;
-}
-
-// ================= SAVE =================
 async function saveProfile() {
 
-  const token =
-    localStorage.getItem("hmbl_token");
+  const token = localStorage.getItem("hmbl_token");
 
   const payload = {
 
@@ -295,21 +224,13 @@ async function saveProfile() {
     country: getVal("country"),
 
     socials: {
-
       twitter: getVal("twitter"),
-
       instagram: getVal("instagram"),
-
       tiktok: getVal("tiktok")
     },
 
     music: getVal("music")
   };
-
-  if (!payload.position) {
-    alert("Pick a position");
-    return;
-  }
 
   try {
 
@@ -336,7 +257,7 @@ async function saveProfile() {
         ...payload
       };
 
-      renderDisplay(CURRENT_USER);
+      renderProfile(CURRENT_USER);
 
     }
 
@@ -345,7 +266,6 @@ async function saveProfile() {
   }
 }
 
-// ================= HELPERS =================
 function setVal(id, val) {
 
   const el = document.getElementById(id);
