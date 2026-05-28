@@ -4,19 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>HMBL | Profile</title>
+  <title>HMBL | Edit Profile</title>
 
-  <!-- REQUIRED CSS -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="profile.css">
-
 </head>
 
 <body>
 
 <div class="bg-glow" id="glow"></div>
 
-<!-- NAV (simple version) -->
 <header class="nav">
 
   <div class="logo">
@@ -24,27 +21,28 @@
   </div>
 
   <nav class="links">
-    <button onclick="window.location.href='/'">Home</button>
+    <button onclick="window.location.href='/'">
+      Home
+    </button>
   </nav>
 
 </header>
 
-<!-- MAIN -->
 <main class="container">
 
-  <div class="profile-editor">
+  <div class="profile-layout">
 
-    <!-- LEFT SIDE -->
+    <!-- EDIT SIDEBAR -->
     <div class="editor-sidebar">
 
       <div class="sidebar-header">
         <h2>Edit Profile</h2>
-        <p>Customize your HMBL identity.</p>
+        <p>Your public HMBL profile.</p>
       </div>
 
       <div class="editor-group">
         <label>Username</label>
-        <input id="username" placeholder="Username">
+        <input id="username">
       </div>
 
       <div class="editor-group">
@@ -66,67 +64,43 @@
 
       <div class="editor-group">
         <label>Country</label>
-        <input id="country" placeholder="Country">
+        <input id="country">
       </div>
 
       <div class="editor-group">
         <label>Twitter</label>
-        <input id="twitter" placeholder="@username">
+        <input id="twitter">
       </div>
 
       <div class="editor-group">
         <label>Instagram</label>
-        <input id="instagram" placeholder="@username">
+        <input id="instagram">
       </div>
 
       <div class="editor-group">
         <label>TikTok</label>
-        <input id="tiktok" placeholder="@username">
+        <input id="tiktok">
       </div>
 
       <div class="editor-group">
         <label>Music Link</label>
-        <input id="music" placeholder="Spotify / YouTube">
+        <input id="music">
       </div>
 
-      <button onclick="saveProfile()" class="save-btn">
+      <button class="save-btn" onclick="saveProfile()">
         Save Profile
       </button>
 
     </div>
 
-    <!-- RIGHT SIDE -->
-    <div class="profile-preview">
+    <!-- REAL PROFILE -->
+    <div class="profile-panel">
 
-      <div class="preview-banner"></div>
+      <div id="profile">
 
-      <div class="preview-card">
-
-        <img id="pfp" class="preview-avatar">
-
-        <div class="preview-info">
-
-          <h1 id="displayName">Username</h1>
-
-          <div class="preview-tags">
-            <span id="displayPosition" class="preview-tag">
-              Position
-            </span>
-
-            <span id="displayCountry" class="preview-tag">
-              Country
-            </span>
-          </div>
-
-          <div id="socialsView" class="preview-socials"></div>
-
-          <div id="musicView" class="preview-music"></div>
-
-        </div>
+        <h2>Loading profile...</h2>
 
       </div>
-
-      <div class="stats-grid" id="stats"></div>
 
     </div>
 
@@ -134,7 +108,6 @@
 
 </main>
 
-<!-- SCRIPTS -->
 <script src="config.js"></script>
 <script src="auth-state.js"></script>
 <script src="profile.js"></script>
