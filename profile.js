@@ -1,6 +1,6 @@
 console.log("PROFILE JS LOADED");
 
-const API = window.CONFIG?.API_BASE;
+const API_BASE = window.CONFIG?.API_BASE;
 
 let CURRENT_USER = null;
 
@@ -27,7 +27,7 @@ async function loadProfile() {
 
   try {
 
-    const res = await fetch(`${API}/auth/me`, {
+    const res = await fetch(`${API_BASE}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -291,7 +291,7 @@ async function saveProfile() {
   try {
 
     const res = await fetch(
-      `${API}/players/update-profile`,
+      `${API_BASE}/players/update-profile`,
       {
         method: "POST",
 
