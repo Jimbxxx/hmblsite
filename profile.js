@@ -4,6 +4,7 @@ const API = window.CONFIG?.API_BASE;
 
 let CURRENT_USER = null;
 
+// ================= INIT =================
 document.addEventListener("DOMContentLoaded", async () => {
 
   await loadProfile();
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 
+// ================= LOAD =================
 async function loadProfile() {
 
   const token = localStorage.getItem("hmbl_token");
@@ -33,10 +35,11 @@ async function loadProfile() {
 
     const auth = await res.json();
 
+    console.log("AUTH RESPONSE:", auth);
+
     if (auth.status !== "success") {
 
       localStorage.removeItem("hmbl_token");
-
       window.location.href = "/";
       return;
     }
@@ -45,6 +48,7 @@ async function loadProfile() {
 
     const user = CURRENT_USER;
 
+    // ================= INPUTS =================
     setVal("username", user.username);
     setVal("position", user.position);
     setVal("country", user.country);
@@ -57,14 +61,18 @@ async function loadProfile() {
 
     setVal("music", user.music);
 
+    // ================= RENDER =================
     renderProfile(user);
 
   } catch (err) {
-    console.log(err);
+    console.log("LOAD PROFILE ERROR:", err);
   }
 }
 
+// ================= LIVE PREVIEW =================
 function livePreview() {
+
+  if (!CURRENT_USER) return;
 
   const updated = {
 
@@ -88,6 +96,7 @@ function livePreview() {
   renderProfile(updated);
 }
 
+// ================= RENDER PROFILE =================
 function renderProfile(player) {
 
   const el = document.getElementById("profile");
@@ -108,10 +117,14 @@ function renderProfile(player) {
         ${player.position || "No position set"}
       </p>
 
+      ${player.country ? `
+        <div class="profile-country">
+          ${player.country}
+        </div>
+      ` : ""}
+
       <div class="profile-socials">
-
         ${renderSocials(player.socials || {})}
-
       </div>
 
       <div class="profile-stats">
@@ -146,9 +159,11 @@ function renderProfile(player) {
   `;
 }
 
-function renderSocials(socials) {
+// ================= SOCIALS =================
+function renderSocials(socials = {}) {
 
   return `
+
     ${socials.twitter ? `
       <a
         href="https://twitter.com/${socials.twitter.replace("@", "")}"
@@ -178,13 +193,16 @@ function renderSocials(socials) {
         TikTok
       </a>
     ` : ""}
+
   `;
 }
 
+// ================= MUSIC =================
 function renderMusic(link) {
 
   if (!link) return "";
 
+  // SPOTIFY
   if (link.includes("spotify.com")) {
 
     const cleaned = link.replace(
@@ -197,6 +215,7 @@ function renderMusic(link) {
         style="
           border-radius:18px;
           width:100%;
+          margin-top:20px;
         "
         src="${cleaned}"
         height="152"
@@ -208,9 +227,44 @@ function renderMusic(link) {
     `;
   }
 
+  // YOUTUBE
+  if (
+    link.includes("youtube.com") ||
+    link.includes("youtu.be")
+  ) {
+
+    let videoId = "";
+
+    if (link.includes("watch?v=")) {
+      videoId = link.split("watch?v=")[1];
+    }
+
+    if (link.includes("youtu.be/")) {
+      videoId = link.split("youtu.be/")[1];
+    }
+
+    videoId = videoId.split("&")[0];
+
+    return `
+      <iframe
+        width="100%"
+        height="320"
+        src="https://www.youtube.com/embed/${videoId}"
+        frameborder="0"
+        allowfullscreen
+        style="
+          border:none;
+          border-radius:18px;
+          margin-top:20px;
+        "
+      ></iframe>
+    `;
+  }
+
   return "";
 }
 
+// ================= SAVE =================
 async function saveProfile() {
 
   const token = localStorage.getItem("hmbl_token");
@@ -232,6 +286,8 @@ async function saveProfile() {
     music: getVal("music")
   };
 
+  console.log("SAVING:", payload);
+
   try {
 
     const res = await fetch(
@@ -250,6 +306,8 @@ async function saveProfile() {
 
     const json = await res.json();
 
+    console.log("SAVE RESPONSE:", json);
+
     if (json.status === "success") {
 
       CURRENT_USER = {
@@ -259,13 +317,23 @@ async function saveProfile() {
 
       renderProfile(CURRENT_USER);
 
+      alert("Profile saved");
+
+    } else {
+
+      alert(json.message || "Failed to save profile");
+
     }
 
   } catch (err) {
-    console.log(err);
+
+    console.log("SAVE ERROR:", err);
+
+    alert("Error saving profile");
   }
 }
 
+// ================= HELPERS =================
 function setVal(id, val) {
 
   const el = document.getElementById(id);
