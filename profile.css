@@ -2,7 +2,11 @@
    PROFILE EDITOR
 ========================================= */
 
-.profile-editor {
+/* =========================================
+   PROFILE EDIT PAGE
+========================================= */
+
+.profile-layout {
   display: grid;
   grid-template-columns: 340px 1fr;
   gap: 28px;
@@ -11,22 +15,28 @@
   margin-top: 40px;
 }
 
+.profile-panel {
+  width: 100%;
+}
+
 /* SIDEBAR */
 
 .editor-sidebar {
-  background: rgba(8,8,8,0.96);
-
-  border: 1px solid rgba(255,106,0,0.14);
-
-  border-radius: 22px;
-
-  padding: 24px;
+  position: sticky;
+  top: 30px;
 
   height: fit-content;
 
+  padding: 24px;
+
+  border-radius: 24px;
+
+  background: rgba(8,8,8,0.96);
+
+  border: 1px solid rgba(255,106,0,0.12);
+
   box-shadow:
-    0 0 40px rgba(255,106,0,0.05),
-    inset 0 0 30px rgba(255,106,0,0.03);
+    0 0 40px rgba(255,106,0,0.04);
 }
 
 .sidebar-header h2 {
@@ -35,9 +45,9 @@
 }
 
 .sidebar-header p {
-  opacity: 0.55;
-  margin-top: 6px;
+  margin-top: 8px;
   margin-bottom: 24px;
+  opacity: 0.6;
 }
 
 .editor-group {
@@ -58,27 +68,21 @@
 
   padding: 14px;
 
+  border-radius: 14px;
+
   background: #050505;
 
   border: 1px solid rgba(255,106,0,0.12);
 
-  border-radius: 14px;
-
   color: white;
 
   outline: none;
-
-  transition: 0.2s;
 }
 
 .editor-group input:focus,
 .editor-group select:focus {
-  border-color: rgba(255,106,0,0.45);
-
-  box-shadow: 0 0 18px rgba(255,106,0,0.10);
+  border-color: rgba(255,106,0,0.35);
 }
-
-/* SAVE BUTTON */
 
 .save-btn {
   width: 100%;
@@ -89,12 +93,11 @@
 
   border-radius: 16px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #ff6a00,
-      #ff8c42
-    );
+  background: linear-gradient(
+    135deg,
+    #ff6a00,
+    #ff8c42
+  );
 
   color: white;
 
@@ -107,106 +110,51 @@
 
 .save-btn:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 0 25px rgba(255,106,0,0.25);
 }
 
-/* PREVIEW */
+/* =========================================
+   PUBLIC PROFILE
+========================================= */
 
-.profile-preview {
+.profile-view {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.preview-banner {
-  height: 180px;
-
-  border-radius: 24px;
-
-  background:
-    radial-gradient(circle at top left,
-      rgba(255,106,0,0.3),
-      transparent 40%),
-    linear-gradient(
-      135deg,
-      #111,
-      #050505
-    );
-
-  border: 1px solid rgba(255,106,0,0.1);
-}
-
-.preview-card {
-  margin-top: -90px;
-
-  margin-left: 30px;
-  margin-right: 30px;
-
-  padding: 26px;
-
-  background: rgba(8,8,8,0.96);
-
-  border: 1px solid rgba(255,106,0,0.14);
-
-  border-radius: 24px;
-
-  display: flex;
-  gap: 24px;
-
   align-items: center;
 
-  backdrop-filter: blur(10px);
-
-  box-shadow:
-    0 0 40px rgba(255,106,0,0.05);
+  text-align: center;
 }
 
-.preview-avatar {
-  width: 120px;
-  height: 120px;
+.profile-pfp-large {
+  width: 130px;
+  height: 130px;
 
   border-radius: 50%;
-
   object-fit: cover;
 
-  border: 3px solid rgba(255,106,0,0.35);
+  border: 3px solid rgba(255,106,0,0.3);
 
   box-shadow:
-    0 0 35px rgba(255,106,0,0.2);
+    0 0 30px rgba(255,106,0,0.18);
 }
 
-.preview-info h1 {
-  margin: 0;
-  font-size: 38px;
-}
-
-.preview-tags {
-  display: flex;
-  gap: 10px;
-
-  margin-top: 10px;
-}
-
-.preview-tag {
-  padding: 8px 14px;
-
-  border-radius: 999px;
-
-  background: rgba(255,255,255,0.03);
-
-  border: 1px solid rgba(255,106,0,0.15);
-
-  font-size: 13px;
-}
-
-.preview-socials {
+.profile-view h1 {
   margin-top: 18px;
+  margin-bottom: 8px;
 
+  font-size: 42px;
+}
+
+.profile-position {
+  opacity: 0.7;
+}
+
+.profile-socials {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
+
+  margin-top: 18px;
 }
 
 .social-pill {
@@ -218,9 +166,9 @@
 
   border: 1px solid rgba(255,106,0,0.12);
 
-  color: white;
-
   text-decoration: none;
+
+  color: white;
 
   font-size: 13px;
 
@@ -228,13 +176,65 @@
 }
 
 .social-pill:hover {
-  border-color: rgba(255,106,0,0.4);
-
   transform: translateY(-2px);
+
+  border-color: rgba(255,106,0,0.35);
 }
 
-.preview-music {
-  margin-top: 18px;
+.profile-stats {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(180px, 1fr));
+
+  gap: 16px;
+
+  margin-top: 28px;
+}
+
+.stat-box {
+  padding: 22px;
+
+  border-radius: 20px;
+
+  background: rgba(8,8,8,0.95);
+
+  border: 1px solid rgba(255,106,0,0.12);
+}
+
+.stat-box h2 {
+  margin: 0;
+
+  font-size: 34px;
+
+  color: #ff8c42;
+}
+
+.stat-box p {
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
+.profile-music {
+  margin-top: 28px;
+
+  width: 100%;
+  max-width: 700px;
+}
+
+@media (max-width: 1000px) {
+
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-sidebar {
+    position: relative;
+    top: 0;
+  }
+
 }
 
 /* =========================================
