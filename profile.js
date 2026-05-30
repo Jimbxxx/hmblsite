@@ -120,11 +120,12 @@ function renderProfile(player) {
       ` : ""}
 
       <div class="profile-socials">
-        renderSocials({
+        ${renderSocials({
           twitter: player.twitter,
           instagram: player.instagram,
           tiktok: player.tiktok
-        })
+        })}
+      </div>
       </div>
 
       <div class="profile-stats">
