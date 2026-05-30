@@ -2,7 +2,7 @@ console.log("PROFILE JS LOADED");
 
 const API_BASE = window.CONFIG?.API_BASE;
 
-let CURRENT_USER = null;
+window.CURRENT_USER = null;
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", async () => {
@@ -44,9 +44,9 @@ async function loadProfile() {
       return;
     }
 
-    CURRENT_USER = auth.user;
+    window.CURRENT_USER = auth.user;
 
-    const user = CURRENT_USER;
+    const user = window.CURRENT_USER;
 
     // ================= INPUTS =================
     setVal("username", user.username);
@@ -72,11 +72,11 @@ async function loadProfile() {
 // ================= LIVE PREVIEW =================
 function livePreview() {
 
-  if (!CURRENT_USER) return;
+  if (!window.CURRENT_USER) return;
 
   const updated = {
 
-    ...CURRENT_USER,
+    ...window.CURRENT_USER,
 
     username: getVal("username"),
 
@@ -310,12 +310,12 @@ async function saveProfile() {
 
     if (json.status === "success") {
 
-      CURRENT_USER = {
-        ...CURRENT_USER,
+      window.CURRENT_USER = {
+        ...window.CURRENT_USER,
         ...payload
       };
 
-      renderProfile(CURRENT_USER);
+      renderProfile(window.CURRENT_USER);
 
       alert("Profile saved");
 
