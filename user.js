@@ -82,6 +82,15 @@ function renderProfile(player) {
         ${player.position || "No position set"}
       </p>
 
+      <!-- ✅ SOCIALS ADDED HERE -->
+      <div class="profile-socials">
+        ${renderSocials({
+          twitter: player.twitter,
+          instagram: player.instagram,
+          tiktok: player.tiktok
+        })}
+      </div>
+
       <div class="profile-stats">
 
         <div class="stat-box">
@@ -112,6 +121,31 @@ function renderProfile(player) {
   `;
 }
 
+// ================= SOCIALS =================
+function renderSocials(socials = {}) {
+
+  return `
+    ${socials.twitter ? `
+      <a href="https://twitter.com/${socials.twitter.replace("@", "")}" target="_blank">
+        Twitter
+      </a>
+    ` : ""}
+
+    ${socials.instagram ? `
+      <a href="https://instagram.com/${socials.instagram.replace("@", "")}" target="_blank">
+        Instagram
+      </a>
+    ` : ""}
+
+    ${socials.tiktok ? `
+      <a href="https://tiktok.com/@${socials.tiktok.replace("@", "")}" target="_blank">
+        TikTok
+      </a>
+    ` : ""}
+  `;
+}
+
+// ================= MUSIC =================
 function renderMusic(link) {
 
   if (!link) return "";
@@ -119,11 +153,10 @@ function renderMusic(link) {
   // SPOTIFY
   if (link.includes("spotify.com")) {
 
-    const cleaned = link
-      .replace(
-        "open.spotify.com/",
-        "open.spotify.com/embed/"
-      );
+    const cleaned = link.replace(
+      "open.spotify.com/",
+      "open.spotify.com/embed/"
+    );
 
     return `
       <iframe
