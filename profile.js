@@ -53,11 +53,9 @@ async function loadProfile() {
     setVal("position", user.position);
     setVal("country", user.country);
 
-    const socials = user.socials || {};
-
-    setVal("twitter", socials.twitter);
-    setVal("instagram", socials.instagram);
-    setVal("tiktok", socials.tiktok);
+    setVal("twitter", user.twitter);
+    setVal("instagram", user.instagram);
+    setVal("tiktok", user.tiktok);
 
     setVal("music", user.music);
 
@@ -84,11 +82,9 @@ function livePreview() {
 
     country: getVal("country"),
 
-    socials: {
-      twitter: getVal("twitter"),
-      instagram: getVal("instagram"),
-      tiktok: getVal("tiktok")
-    },
+    twitter: getVal("twitter"),
+    instagram: getVal("instagram"),
+    tiktok: getVal("tiktok"),
 
     music: getVal("music")
   };
@@ -124,7 +120,11 @@ function renderProfile(player) {
       ` : ""}
 
       <div class="profile-socials">
-        ${renderSocials(player.socials || {})}
+        renderSocials({
+          twitter: player.twitter,
+          instagram: player.instagram,
+          tiktok: player.tiktok
+        })
       </div>
 
       <div class="profile-stats">
@@ -270,19 +270,12 @@ async function saveProfile() {
   const token = localStorage.getItem("hmbl_token");
 
   const payload = {
-
     username: getVal("username"),
-
     position: getVal("position"),
-
     country: getVal("country"),
-
-    socials: {
-      twitter: getVal("twitter"),
-      instagram: getVal("instagram"),
-      tiktok: getVal("tiktok")
-    },
-
+    twitter: getVal("twitter"),
+    instagram: getVal("instagram"),
+    tiktok: getVal("tiktok"),
     music: getVal("music")
   };
 
