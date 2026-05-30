@@ -1,6 +1,6 @@
 const API = window.CONFIG?.API_BASE;
 
-let CURRENT_USER = null;
+window.CURRENT_USER = null;
 
 // ================= UI STATES =================
 function setLoggedIn() {
