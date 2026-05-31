@@ -21,9 +21,7 @@
   </div>
 
   <nav class="links">
-    <button onclick="window.location.href='/'">
-      Home
-    </button>
+    <button onclick="window.location.href='/'">Home</button>
   </nav>
 
 </header>
@@ -32,22 +30,21 @@
 
   <div class="profile-layout">
 
-    <!-- EDIT SIDEBAR -->
-    <div class="editor-sidebar">
+    <!-- EDITOR -->
+    <aside class="editor-sidebar">
 
       <div class="sidebar-header">
         <h2>Edit Profile</h2>
-        <p>Your public HMBL profile.</p>
+        <p>Changes update your public card live.</p>
       </div>
 
       <div class="editor-group">
         <label>Username</label>
-        <input id="username">
+        <input id="username" />
       </div>
 
       <div class="editor-group">
         <label>Position</label>
-
         <select id="position">
           <option value="">Select position</option>
           <option>GK</option>
@@ -64,45 +61,41 @@
 
       <div class="editor-group">
         <label>Country</label>
-        <input id="country">
+        <input id="country" />
       </div>
 
       <div class="editor-group">
         <label>Twitter</label>
-        <input id="twitter">
+        <input id="twitter" />
       </div>
 
       <div class="editor-group">
         <label>Instagram</label>
-        <input id="instagram">
+        <input id="instagram" />
       </div>
 
       <div class="editor-group">
         <label>TikTok</label>
-        <input id="tiktok">
+        <input id="tiktok" />
       </div>
 
       <div class="editor-group">
         <label>Music Link</label>
-        <input id="music">
+        <input id="music" />
       </div>
 
       <button class="save-btn" onclick="saveProfile()">
         Save Profile
       </button>
 
-    </div>
+    </aside>
 
-    <!-- REAL PROFILE -->
-    <div class="profile-panel">
-
-      <div id="profile">
-
-        <h2>Loading profile...</h2>
-
+    <!-- PREVIEW -->
+    <section class="profile-panel">
+      <div id="profile" class="profile-root">
+        <div class="loading-state">Loading profile...</div>
       </div>
-
-    </div>
+    </section>
 
   </div>
 
