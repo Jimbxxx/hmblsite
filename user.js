@@ -1,6 +1,6 @@
 console.log("USER PROFILE LOADED");
 
-const API = window.CONFIG.API_BASE;
+const API = window.CONFIG?.API_BASE;
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -38,21 +38,17 @@ async function loadUserProfile() {
     renderProfile(player);
 
   } catch (err) {
-    console.log(err);
+    console.log("LOAD ERROR:", err);
     showError("Error loading profile");
   }
 }
 
-// ================= FIXED URL PARSER =================
+// ================= URL PARSER =================
 function getUsernameFromURL() {
 
-  const path = window.location.pathname
-    .replace(/^\/+/, "");
+  const path = window.location.pathname.replace(/^\/+/, "");
 
-  if (
-    path === "" ||
-    path.endsWith(".html")
-  ) {
+  if (!path || path.endsWith(".html")) {
     return null;
   }
 
@@ -63,7 +59,6 @@ function getUsernameFromURL() {
 function renderProfile(player) {
 
   const el = document.getElementById("profile");
-
   if (!el) return;
 
   const musicHTML = renderMusic(player.music);
@@ -82,7 +77,12 @@ function renderProfile(player) {
         ${player.position || "No position set"}
       </p>
 
-      <!-- ✅ SOCIALS ADDED HERE -->
+      ${player.country ? `
+        <div class="profile-country">
+          ${player.country}
+        </div>
+      ` : ""}
+
       <div class="profile-socials">
         ${renderSocials({
           twitter: player.twitter,
@@ -145,69 +145,71 @@ function renderSocials(socials = {}) {
   `;
 }
 
-// ================= MUSIC =================
+// ================= MUSIC (SAFE + CLEAN) =================
 function renderMusic(link) {
 
-  if (!link) return "";
+  if (!link || typeof link !== "string") return "";
+
+  const clean = link.trim();
 
   // SPOTIFY
-  if (link.includes("spotify.com")) {
+  if (clean.includes("spotify.com")) {
 
-    const cleaned = link.replace(
+    const embed = clean.replace(
       "open.spotify.com/",
       "open.spotify.com/embed/"
     );
 
     return `
-      <iframe
-        style="
-          border-radius:18px;
-          margin-top:24px;
-          width:100%;
-          max-width:700px;
-        "
-        src="${cleaned}"
-        height="152"
-        frameborder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"
-      ></iframe>
+      <div class="profile-music">
+        <iframe
+          style="
+            border-radius:18px;
+            width:100%;
+            max-width:700px;
+            margin-top:24px;
+          "
+          src="${embed}"
+          height="152"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe>
+      </div>
     `;
   }
 
   // YOUTUBE
-  if (
-    link.includes("youtube.com") ||
-    link.includes("youtu.be")
-  ) {
+  if (clean.includes("youtube.com") || clean.includes("youtu.be")) {
 
     let videoId = "";
 
-    if (link.includes("watch?v=")) {
-      videoId = link.split("watch?v=")[1];
+    if (clean.includes("watch?v=")) {
+      videoId = clean.split("watch?v=")[1];
     }
 
-    if (link.includes("youtu.be/")) {
-      videoId = link.split("youtu.be/")[1];
+    if (clean.includes("youtu.be/")) {
+      videoId = clean.split("youtu.be/")[1];
     }
 
     videoId = videoId.split("&")[0];
 
     return `
-      <iframe
-        width="100%"
-        height="380"
-        src="https://www.youtube.com/embed/${videoId}"
-        frameborder="0"
-        allowfullscreen
-        style="
-          border:none;
-          border-radius:18px;
-          margin-top:24px;
-          max-width:700px;
-        "
-      ></iframe>
+      <div class="profile-music">
+        <iframe
+          width="100%"
+          height="380"
+          src="https://www.youtube.com/embed/${videoId}"
+          frameborder="0"
+          allowfullscreen
+          style="
+            border:none;
+            border-radius:18px;
+            margin-top:24px;
+            max-width:700px;
+          "
+        ></iframe>
+      </div>
     `;
   }
 
