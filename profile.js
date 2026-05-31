@@ -38,7 +38,6 @@ async function loadProfile() {
     console.log("AUTH RESPONSE:", auth);
 
     if (auth.status !== "success") {
-
       localStorage.removeItem("hmbl_token");
       window.location.href = "/";
       return;
@@ -73,13 +72,10 @@ function livePreview() {
   if (!window.CURRENT_USER) return;
 
   const updated = {
-
     ...window.CURRENT_USER,
 
     username: getVal("username"),
-
     position: getVal("position"),
-
     country: getVal("country"),
 
     twitter: getVal("twitter"),
@@ -96,7 +92,6 @@ function livePreview() {
 function renderProfile(player) {
 
   const el = document.getElementById("profile");
-
   if (!el) return;
 
   el.innerHTML = `
@@ -125,7 +120,6 @@ function renderProfile(player) {
           instagram: player.instagram,
           tiktok: player.tiktok
         })}
-      </div>
       </div>
 
       <div class="profile-stats">
@@ -164,84 +158,69 @@ function renderProfile(player) {
 function renderSocials(socials = {}) {
 
   return `
-
     ${socials.twitter ? `
-      <a
-        href="https://twitter.com/${socials.twitter.replace("@", "")}"
-        target="_blank"
-        class="social-pill"
-      >
+      <a href="https://twitter.com/${socials.twitter.replace("@", "")}"
+         target="_blank"
+         class="social-pill">
         Twitter
       </a>
     ` : ""}
 
     ${socials.instagram ? `
-      <a
-        href="https://instagram.com/${socials.instagram.replace("@", "")}"
-        target="_blank"
-        class="social-pill"
-      >
+      <a href="https://instagram.com/${socials.instagram.replace("@", "")}"
+         target="_blank"
+         class="social-pill">
         Instagram
       </a>
     ` : ""}
 
     ${socials.tiktok ? `
-      <a
-        href="https://tiktok.com/@${socials.tiktok.replace("@", "")}"
-        target="_blank"
-        class="social-pill"
-      >
+      <a href="https://tiktok.com/@${socials.tiktok.replace("@", "")}"
+         target="_blank"
+         class="social-pill">
         TikTok
       </a>
     ` : ""}
-
   `;
 }
 
-// ================= MUSIC =================
+// ================= MUSIC (FIXED - NOT ASYNC) =================
 function renderMusic(link) {
 
   if (!link) return "";
 
-  // SPOTIFY
-  if (link.includes("spotify.com")) {
+  const cleanLink = link.trim();
 
-    const cleaned = link.replace(
+  // SPOTIFY
+  if (cleanLink.includes("spotify.com")) {
+
+    const embed = cleanLink.replace(
       "open.spotify.com/",
       "open.spotify.com/embed/"
     );
 
     return `
       <iframe
-        style="
-          border-radius:18px;
-          width:100%;
-          margin-top:20px;
-        "
-        src="${cleaned}"
+        style="border-radius:18px; width:100%; margin-top:20px;"
+        src="${embed}"
         height="152"
         frameborder="0"
-        allowfullscreen=""
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"
       ></iframe>
     `;
   }
 
   // YOUTUBE
-  if (
-    link.includes("youtube.com") ||
-    link.includes("youtu.be")
-  ) {
+  if (cleanLink.includes("youtube.com") || cleanLink.includes("youtu.be")) {
 
     let videoId = "";
 
-    if (link.includes("watch?v=")) {
-      videoId = link.split("watch?v=")[1];
+    if (cleanLink.includes("watch?v=")) {
+      videoId = cleanLink.split("watch?v=")[1];
     }
 
-    if (link.includes("youtu.be/")) {
-      videoId = link.split("youtu.be/")[1];
+    if (cleanLink.includes("youtu.be/")) {
+      videoId = cleanLink.split("youtu.be/")[1];
     }
 
     videoId = videoId.split("&")[0];
@@ -249,15 +228,11 @@ function renderMusic(link) {
     return `
       <iframe
         width="100%"
-        height="320"
+        height="380"
         src="https://www.youtube.com/embed/${videoId}"
         frameborder="0"
         allowfullscreen
-        style="
-          border:none;
-          border-radius:18px;
-          margin-top:20px;
-        "
+        style="border:none; border-radius:18px; margin-top:20px;"
       ></iframe>
     `;
   }
@@ -284,19 +259,14 @@ async function saveProfile() {
 
   try {
 
-    const res = await fetch(
-      `${API_BASE}/players/update-profile`,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-
-        body: JSON.stringify(payload)
-      }
-    );
+    const res = await fetch(`${API_BASE}/players/update-profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
 
     const json = await res.json();
 
@@ -314,35 +284,23 @@ async function saveProfile() {
       alert("Profile saved");
 
     } else {
-
       alert(json.message || "Failed to save profile");
-
     }
 
   } catch (err) {
-
     console.log("SAVE ERROR:", err);
-
     alert("Error saving profile");
   }
 }
 
 // ================= HELPERS =================
 function setVal(id, val) {
-
   const el = document.getElementById(id);
-
-  if (el) {
-    el.value = val || "";
-  }
+  if (el) el.value = val || "";
 }
 
 function getVal(id) {
-
-  return document
-    .getElementById(id)
-    ?.value
-    ?.trim() || "";
+  return document.getElementById(id)?.value?.trim() || "";
 }
 
 window.saveProfile = saveProfile;
