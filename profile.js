@@ -35,8 +35,6 @@ async function loadProfile() {
 
     const auth = await res.json();
 
-    console.log("AUTH RESPONSE:", auth);
-
     if (auth.status !== "success") {
       localStorage.removeItem("hmbl_token");
       window.location.href = "/";
@@ -47,7 +45,6 @@ async function loadProfile() {
 
     const user = window.CURRENT_USER;
 
-    // ================= INPUTS =================
     setVal("username", user.username);
     setVal("position", user.position);
     setVal("country", user.country);
@@ -58,8 +55,7 @@ async function loadProfile() {
 
     setVal("music", user.music);
 
-    // ================= RENDER =================
-    renderProfile(user);
+    await renderProfile(user);
 
   } catch (err) {
     console.log("LOAD PROFILE ERROR:", err);
@@ -88,19 +84,19 @@ function livePreview() {
   renderProfile(updated);
 }
 
-// ================= RENDER PROFILE =================
-function renderProfile(player) {
+// ================= RENDER PROFILE (FIXED ASYNC) =================
+async function renderProfile(player) {
 
   const el = document.getElementById("profile");
   if (!el) return;
 
+  const musicHTML = await renderMusic(player.music);
+
   el.innerHTML = `
     <div class="profile-view">
 
-      <img
-        src="${player.pfp || "https://cdn.discordapp.com/embed/avatars/0.png"}"
-        class="profile-pfp-large"
-      >
+      <img src="${player.pfp || "https://cdn.discordapp.com/embed/avatars/0.png"}"
+           class="profile-pfp-large">
 
       <h1>${player.username || "Unknown User"}</h1>
 
@@ -124,31 +120,14 @@ function renderProfile(player) {
 
       <div class="profile-stats">
 
-        <div class="stat-box">
-          <h2>${player.goals || 0}</h2>
-          <p>Goals</p>
-        </div>
-
-        <div class="stat-box">
-          <h2>${player.assists || 0}</h2>
-          <p>Assists</p>
-        </div>
-
-        <div class="stat-box">
-          <h2>${player.points || 0}</h2>
-          <p>Points</p>
-        </div>
-
-        <div class="stat-box">
-          <h2>${player.clean_sheets || 0}</h2>
-          <p>Clean Sheets</p>
-        </div>
+        <div class="stat-box"><h2>${player.goals || 0}</h2><p>Goals</p></div>
+        <div class="stat-box"><h2>${player.assists || 0}</h2><p>Assists</p></div>
+        <div class="stat-box"><h2>${player.points || 0}</h2><p>Points</p></div>
+        <div class="stat-box"><h2>${player.clean_sheets || 0}</h2><p>Clean Sheets</p></div>
 
       </div>
 
-      <div class="profile-music">
-        ${renderMusic(player.music)}
-      </div>
+      ${musicHTML}
 
     </div>
   `;
@@ -184,60 +163,51 @@ function renderSocials(socials = {}) {
   `;
 }
 
-// ================= MUSIC (FIXED - NOT ASYNC) =================
-function renderMusic(link) {
+// ================= MUSIC =================
+async function renderMusic(link) {
 
   if (!link) return "";
 
-  const cleanLink = link.trim();
+  try {
 
-  // SPOTIFY
-  if (cleanLink.includes("spotify.com")) {
+    const res = await fetch(`${API_BASE}/spotify-track`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ url: link })
+    });
 
-    const embed = cleanLink.replace(
-      "open.spotify.com/",
-      "open.spotify.com/embed/"
-    );
+    const json = await res.json();
 
-    return `
-      <iframe
-        style="border-radius:18px; width:100%; margin-top:20px;"
-        src="${embed}"
-        height="152"
-        frameborder="0"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      ></iframe>
-    `;
-  }
+    if (json.status !== "success") return "";
 
-  // YOUTUBE
-  if (cleanLink.includes("youtube.com") || cleanLink.includes("youtu.be")) {
-
-    let videoId = "";
-
-    if (cleanLink.includes("watch?v=")) {
-      videoId = cleanLink.split("watch?v=")[1];
-    }
-
-    if (cleanLink.includes("youtu.be/")) {
-      videoId = cleanLink.split("youtu.be/")[1];
-    }
-
-    videoId = videoId.split("&")[0];
+    const t = json.track;
 
     return `
-      <iframe
-        width="100%"
-        height="380"
-        src="https://www.youtube.com/embed/${videoId}"
-        frameborder="0"
-        allowfullscreen
-        style="border:none; border-radius:18px; margin-top:20px;"
-      ></iframe>
-    `;
-  }
+      <div class="music-card">
 
-  return "";
+        <img src="${t.cover}" class="music-cover" />
+
+        <div class="music-info">
+
+          <div class="music-title">${t.name}</div>
+
+          <div class="music-artist">${t.artist}</div>
+
+          <a href="${t.spotify_url}" target="_blank" class="music-btn">
+            Open in Spotify
+          </a>
+
+        </div>
+
+      </div>
+    `;
+
+  } catch (err) {
+    console.log("MUSIC ERROR:", err);
+    return "";
+  }
 }
 
 // ================= SAVE =================
@@ -255,8 +225,6 @@ async function saveProfile() {
     music: getVal("music")
   };
 
-  console.log("SAVING:", payload);
-
   try {
 
     const res = await fetch(`${API_BASE}/players/update-profile`, {
@@ -270,8 +238,6 @@ async function saveProfile() {
 
     const json = await res.json();
 
-    console.log("SAVE RESPONSE:", json);
-
     if (json.status === "success") {
 
       window.CURRENT_USER = {
@@ -279,7 +245,7 @@ async function saveProfile() {
         ...payload
       };
 
-      renderProfile(window.CURRENT_USER);
+      await renderProfile(window.CURRENT_USER);
 
       alert("Profile saved");
 
@@ -289,7 +255,6 @@ async function saveProfile() {
 
   } catch (err) {
     console.log("SAVE ERROR:", err);
-    alert("Error saving profile");
   }
 }
 
