@@ -125,6 +125,18 @@ function setupAuthUI() {
 
   const token = localStorage.getItem("hmbl_token");
 
+  const adminBtn = document.getElementById("adminBtn");
+
+    if (adminBtn) {
+      const user = JSON.parse(localStorage.getItem("hmbl_user") || "null");
+    
+      if (user?.is_admin) {
+        adminBtn.style.display = "inline-block";
+      } else {
+        adminBtn.style.display = "none";
+      }
+    }
+
   if (loginBtn) {
     loginBtn.onclick = () => {
       window.location.href = `${API}/auth/discord/login`;
