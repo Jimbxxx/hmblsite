@@ -25,6 +25,9 @@ async function initAuth() {
     }
 
     CURRENT_USER = data.user;
+    localStorage.setItem("hmbl_user", JSON.stringify(data.user));
+    localStorage.setItem("hmbl_is_admin", data.user?.is_admin === true);
+    
     setLoggedIn();
 
   } catch (err) {
