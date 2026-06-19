@@ -119,69 +119,62 @@ function setupGlow() {
 }
 
 // ================= AUTH UI =================
-function setupAuthUI() {
+async function setupAuthUI() {
   const loginBtn = document.getElementById("loginBtn");
   const profileBtn = document.getElementById("profileBtn");
+  const adminBtn = document.getElementById("adminBtn");
 
   const token = localStorage.getItem("hmbl_token");
 
-  const adminBtn = document.getElementById("adminBtn");
+  // default state
+  if (!token) {
+    if (adminBtn) adminBtn.style.display = "none";
+    if (profileBtn) profileBtn.style.display = "none";
+    return;
+  }
 
+  try {
+    const res = await fetch(`${API}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.status !== "success") {
+      localStorage.removeItem("hmbl_token");
+      return;
+    }
+
+    // save user properly
+    localStorage.setItem("hmbl_user", JSON.stringify(data.user));
+
+    // login/profile buttons
+    if (loginBtn) loginBtn.style.display = "none";
+    if (profileBtn) profileBtn.style.display = "inline-block";
+
+    profileBtn.onclick = () => {
+      window.location.href = `/${data.user.username}`;
+    };
+
+    // ADMIN BUTTON FIX
     if (adminBtn) {
-      const user = JSON.parse(localStorage.getItem("hmbl_user") || "null");
-    
-      if (user?.is_admin) {
+      if (data.user?.is_admin === true) {
         adminBtn.style.display = "inline-block";
       } else {
         adminBtn.style.display = "none";
       }
     }
 
+  } catch (err) {
+    console.log("Auth error:", err);
+  }
+
   if (loginBtn) {
     loginBtn.onclick = () => {
       window.location.href = `${API}/auth/discord/login`;
     };
-  }
-
-  if (!profileBtn) return;
-
-  if (token) {
-    loginBtn && (loginBtn.style.display = "none");
-    profileBtn.style.display = "inline-block";
-
-    profileBtn.onclick = async () => {
-      const token = localStorage.getItem("hmbl_token");
-
-      if (!token) {
-        window.location.href = "/";
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API}/auth/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        const data = await res.json();
-
-        if (data.status !== "success") {
-          window.location.href = "/";
-          return;
-        }
-
-        window.location.href = `/${data.user.username}`;
-
-      } catch (err) {
-        console.log("Profile redirect error:", err);
-        window.location.href = "/";
-      }
-    };
-
-  } else {
-    loginBtn && (loginBtn.style.display = "inline-block");
-    profileBtn.style.display = "none";
   }
 }
 
