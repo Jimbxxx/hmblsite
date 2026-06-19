@@ -186,3 +186,18 @@ function goProfile() {
 function goAdmin() {
   window.location.href = "/admin.html";
 }
+
+
+function setupLogin() {
+  const loginBtn = document.getElementById("loginBtn");
+
+  if (!loginBtn) return;
+
+  loginBtn.onclick = () => {
+    window.location.href = "https://hmblapi.onrender.com/auth/discord/login";
+  };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupLogin();
+});
