@@ -21,3 +21,28 @@ async function requireAdmin() {
     window.location.href = "/";
   }
 }
+
+
+async function openPanel(roleId, url) {
+
+  const token = localStorage.getItem("hmbl_token");
+
+  const res = await fetch(`${API}/auth/check-role`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      role: roleId
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.allowed) {
+    window.location.href = url;
+  } else {
+    alert("No permission");
+  }
+}
