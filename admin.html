@@ -17,24 +17,28 @@
 
   <div class="admin-grid">
 
-    <button class="admin-card owner">
+    <button class="admin-card owner"
+      onclick="openPanel('1482046938688913538','/owner.html')">
       <h2>Owner Panel</h2>
       <p>Full Access (POC+)</p>
     </button>
 
-    <button class="admin-card admin">
+    <button class="admin-card admin"
+      onclick="openPanel('1467629210712543365','/admin-tools.html')">
       <h2>Admin Panel</h2>
       <p>System Management + Controls (OWNER+)</p>
     </button>
 
-    <button class="admin-card overseer">
+    <button class="admin-card overseer"
+      onclick="openPanel('1468708372634407079','/overseer.html')">
       <h2>Overseer Panel</h2>
-      <p>Division + User Management (OVERSEER)</p>
+      <p>Division + User Management</p>
     </button>
 
-    <button class="admin-card staff">
+    <button class="admin-card staff"
+      onclick="openPanel('1483922965329346660','/staff.html')">
       <h2>Staff Panel</h2>
-      <p>Basic staff tools (STAFF)</p>
+      <p>Basic staff tools</p>
     </button>
 
   </div>
@@ -45,6 +49,10 @@
 <script src="auth.js"></script>
 <script src="admin.js"></script>
 <script src="admin-page.js"></script>
+
+<script>
+const API = "https://hmblapi.onrender.com";
+</script>
 
 </body>
 </html>
