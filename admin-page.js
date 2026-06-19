@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
-  requireAdmin();
+document.addEventListener("DOMContentLoaded", async () => {
+  await requireAdmin();
   loadAdmin();
 });
 
