@@ -182,3 +182,7 @@ async function setupAuthUI() {
 function goProfile() {
   window.location.href = "/profile.html";
 }
+
+function goAdmin() {
+  window.location.href = "/admin.html";
+}
