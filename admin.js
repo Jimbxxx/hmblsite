@@ -23,7 +23,7 @@ async function requireAdmin() {
 }
 
 
-async function openPanel(roleId, url) {
+async function openPanel(panelName, url) {
 
   const token = localStorage.getItem("hmbl_token");
 
@@ -34,7 +34,7 @@ async function openPanel(roleId, url) {
       "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify({
-      role: roleId
+      panel: panelName
     })
   });
 
